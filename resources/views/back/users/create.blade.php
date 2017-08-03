@@ -6,7 +6,7 @@
   @include('back.partials.entete', ['title' => trans('back/users.dashboard'), 'icone' => 'user', 'fil' => link_to('user', trans('back/users.Users')) . ' / ' . trans('back/users.creation')])
 
 	<div class="col-sm-12">
-		{!! Form::open(['url' => 'user', 'method' => 'post', 'class' => 'form-horizontal panel']) !!}	
+		{!! Form::open(['url' => 'user/create', 'method' => 'post', 'class' => 'form-horizontal panel']) !!}	
 			{!! Form::control('text', 0, 'username', $errors, trans('back/users.name')) !!}
 			{!! Form::control('email', 0, 'email', $errors, trans('back/users.email')) !!}
 			{!! Form::control('password', 0, 'password', $errors, trans('back/users.password')) !!}

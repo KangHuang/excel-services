@@ -61,12 +61,11 @@ class UserController extends Controller {
 	 */
 	public function indexSort($role)
 	{
-		$counts = $this->user_gestion->counts();
-		$users = $this->user_gestion->index(4, $role); 
+		$users = auth()->guard('users')->user()->staff()->paginate(8); 
 		$links = $users->render();
 		$roles = $this->role_gestion->all();
 
-		return view('back.users.index', compact('users', 'links', 'counts', 'roles'));		
+		return view('back.users.index', compact('users', 'links', 'roles'));		
 	}
 
 	/**
@@ -92,10 +91,10 @@ class UserController extends Controller {
 		$user = $this->user_gestion->store($request->all());
 
                 if(isset($_POST['relation'])){
-                    $manager_id = auth()->guard('users')->user()->staff()->attach($user->id);
+                    auth()->guard('users')->user()->staff()->attach($user->id);
                 }
 
-		return redirect('user/create')->with('ok', trans('back/users.created'));
+		return redirect('user/show')->with('ok', trans('back/users.created'));
 	}
 
 	/**
@@ -164,30 +163,26 @@ class UserController extends Controller {
 
 		return redirect('user')->with('ok', trans('back/users.destroyed'));
 	}
-
-	/**
-	 * Display the roles form
+        
+        /**
+	 * Remove the specified resource from storage.
 	 *
+	 * @param  App\Models\user $user
 	 * @return Response
 	 */
-	public function getRoles()
+	public function destroyStaff($staff_id)
 	{
-		$roles = $this->role_gestion->all();
-
-		return view('back.users.roles', compact('roles'));
+            
+            
+             if(auth()->guard('users')->user()->staff()->get()->contains($staff_id)){
+                 
+                auth()->guard('users')->user()->staff()->detach($staff_id);
+                $user = $this->user_gestion->getById($staff_id);
+		$this->user_gestion->destroyUser($user);
+		return redirect('user/show')->with('ok', trans('back/users.destroyed'));
+             }
+             return redirect('user/show')->with('error', trans('back/users.destroy-fail'));             
+             
 	}
-
-	/**
-	 * Update roles
-	 *
-	 * @param  App\requests\RoleRequest $request
-	 * @return Response
-	 */
-	public function postRoles(RoleRequest $request)
-	{
-		$this->role_gestion->update($request->except('_token'));
-		
-		return redirect('user/roles')->with('ok', trans('back/roles.ok'));
-	}
-
+        
 }

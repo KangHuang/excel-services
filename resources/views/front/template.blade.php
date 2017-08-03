@@ -61,18 +61,12 @@
 								{!! link_to('contact/create', trans('front/site.contact')) !!}
 							</li>
 						@endif
-                                                @if(session('statut') == 'admin')
-                                                    <li {!! classActiveSegment(1, ['services', 'service']) !!}>
-                                                            {!! link_to('services', trans('front/site.service')) !!}
-                                                    </li>
-                                                @else
-                                                    <li {!! classActiveSegment(1, ['services', 'service']) !!}>
-                                                            {!! link_to('services', trans('front/site.service')) !!}
-                                                    </li>
-                                                @endif
+                                               <li {!! classActiveSegment(1, ['services', 'service']) !!}>
+                                                        {!! link_to('services', trans('front/site.service')) !!}
+                                                </li>
                                                 @if(session('statut') == 'manager')
 							<li {!! classActivePath('cont   act/create') !!}>
-								{!! link_to('contact/create', trans('front/site.team')) !!}
+								{!! link_to('user/show', trans('front/site.team')) !!}
 							</li>
 						@endif
 						@if(Request::is('auth/register'))
@@ -91,7 +85,7 @@
 							@else
 								@if(session('statut') == 'admin')
 									<li>
-										{!! link_to_route('admin', trans('front/site.contribution')) !!}
+										{!! link_to('service/order', trans('front/site.contribution')) !!}
 									</li>
 								@endif
 								<li>

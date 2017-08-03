@@ -9,14 +9,6 @@ Route::group(['middleware' => ['web']], function () {
 	]);
 
 
-	// Admin
-	Route::get('admin', [
-		'uses' => 'AdminController@admin',
-		'as' => 'admin',
-		'middleware' => 'admin'
-	]);
-
-
 	// Service
 	Route::get('service/order', ['uses' => 'ServiceController@indexOrder', 'as' => 'service.order','middleware' => 'admin']);
 	Route::get('services', 'ServiceController@indexFront');
@@ -57,14 +49,13 @@ Route::group(['middleware' => ['web']], function () {
 
 
 	// User
-	Route::get('user/sort/{role}', 'UserController@indexSort');
+	Route::get('user/create', ['uses' => 'UserController@create','middleware' => 'manager', 'as'=>'user.create']);
+	Route::post('user/create', ['uses' => 'UserController@store','middleware' => 'manager']);
+        Route::get('user/show', ['uses' => 'UserController@index','middleware' => 'manager', 'as'=>'user.show']);
+        Route::get('user/destroy/{staff_id}', ['uses' => 'UserController@destroyStaff','middleware' => 'manager', 'as'=>'user.destroy']);
 
-	Route::get('user/roles', 'UserController@getRoles');
-	Route::post('user/roles', 'UserController@postRoles');
 
-	Route::put('userseen/{user}', 'UserController@updateSeen');
-
-	Route::resource('user', 'UserController');
+//	Route::resource('user', 'UserController');
 
 	// Authentication routes...
 	Route::get('auth/login', 'Auth\AuthController@getLogin');

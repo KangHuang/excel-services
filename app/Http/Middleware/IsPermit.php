@@ -35,7 +35,7 @@ class IsPermit {
         
         //if manager is permitted
         if (session('statut') === 'manager') {
-            $user_id = auth()->guard('users')->user()->id;
+            $user_id = auth()->guard('users')->id();
             $usersPermit = $this->service_gestion->getById($request->service_id)->users()->get();
             if ($usersPermit->contains($user_id))
                 return $next($request);
@@ -49,6 +49,12 @@ class IsPermit {
                 if($usersPermit->contains($manager->id))
                     return $next($request);
             }
+        }
+        
+        else if(session('statut') === 'admin'){
+            $services = auth()->guard('providers')->user()->services()->get();
+            if($services->contains($request->service_id))
+                return $next($request);
         }
         return redirect('/services')->with('error', 'Sorry, you do not have access to this service');
     }

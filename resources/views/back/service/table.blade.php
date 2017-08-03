@@ -9,7 +9,7 @@
               {!! Form::close() !!}
               </td>
               <td>
-              {!! Form::open(['method' => 'post', 'url' => 'service/preview/'.$post->id]) !!}
+              {!! Form::open(['method' => 'get', 'url' => 'service/run/'.$post->id]) !!}
                 {!! Form::submit(trans('back/service.start')) !!}
               {!! Form::close() !!}
               </td>

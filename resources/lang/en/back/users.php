@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'dashboard' => 'Users Management',
+	'dashboard' => 'Staff Management',
 	'users' => 'users',
 	'add' => 'Add a user',
 	'all' => 'All',
@@ -12,6 +12,7 @@ return [
 	'edit' => 'Edit',
 	'destroy' => 'Destroy',
 	'destroy-warning' => 'Really destroy this user ?',
+        'destroy-fail' => 'Fail to destroy the user',
 	'fail' => 'Update fail.',
 	'creation' => 'Creation',
 	'Users' => 'Users',	

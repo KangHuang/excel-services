@@ -200,13 +200,6 @@ class UserRepository extends BaseRepository
     public function destroyUser(User $user)
     {
         $user->comments()->delete();
-
-        $posts = $user->posts()->get();
-
-        foreach ($posts as $post) {
-            $post->tags()->detach();
-            $post->delete();
-        }
         
         $user->delete();
     }

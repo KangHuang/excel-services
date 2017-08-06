@@ -130,7 +130,7 @@ class PaymentController extends Controller {
             } catch (Exception $ex) {
                 exit(1);
             }
-            return redirect('services')->with('pay', 'The payment is processing. It may take a few minutes');;
+            return redirect('services')->with('pay', 'The payment is processing. It may take a few minutes');
         } else {
             exit;
         }

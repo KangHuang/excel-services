@@ -63,8 +63,8 @@ class PaymentController extends Controller {
 // payment approval/ cancellation.
         $baseUrl = $this->getBaseUrl();
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl("$baseUrl./service/executePayment?success=true")
-                ->setCancelUrl("$baseUrl./service/executePayment?success=false");
+        $redirectUrls->setReturnUrl("$baseUrl/service/executePayment?success=true")
+                ->setCancelUrl("$baseUrl/service/executePayment?success=false");
 // ### Payment
 // A Payment Resource; create one using
 // the above types and intent set to 'sale'

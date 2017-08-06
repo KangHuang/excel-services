@@ -9,7 +9,7 @@
 
 @if(session()->has('pay'))
 <div class="row">
-	@include('partials/error', ['type' => 'success', 'message' => session('error')])
+	@include('partials/error', ['type' => 'success', 'message' => session('pay')])
 </div>
 @endif	
 

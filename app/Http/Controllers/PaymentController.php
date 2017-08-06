@@ -167,13 +167,14 @@ class PaymentController extends Controller {
      */
     public function ipnListener() {
 
+        \Illuminate\Support\Facades\Log::info('ipnstart');
         $ipn = new PaypalIPN();
 // Use the sandbox endpoint during testing.
         $ipn->useSandbox();
         $verified = $ipn->verifyIPN();
         if ($verified) {
             if($_POST['txn_type']=='express_checkout'){
-                \Illuminate\Support\Facades\Log::info('ipnsuccess');
+                
             }
         }
 // Reply with an empty 200 response to indicate to paypal the IPN was received correctly.

@@ -17,11 +17,17 @@ Route::group(['middleware' => ['web']], function () {
             'middleware' => 'admin',
             'as' => 'service.create'
             ]);
+        
+        //PAYMENT
+        Route::get('service/payment', ['uses'=> 'PaymentController@createPayment','middleware' => 'manager']);
+        Route::get('service/executePayment', ['uses'=> 'PaymentController@executePayment','middleware' => 'manager']);
+        Route::post('ipnListen',['uses'=> 'PaymentController@ipnListener']);
 
+        //manage services
         Route::post('service/create', ['uses'=> 'ServiceController@store','middleware' => 'admin']);  
         Route::post('service/destroy/{service_id}', ['uses'=> 'ServiceController@destroy','middleware' => 'admin']);  
         Route::post('service/config/{service_id}', ['uses'=> 'ServiceController@config','middleware' => 'admin']);  
-
+        
         
         //perform phpexcel
 	Route::get('service/run/{service_id}', ['uses' => 'ExcelController@display','middleware' => 'permit']);

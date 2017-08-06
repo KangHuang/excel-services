@@ -294,12 +294,12 @@ class PaypalIPN
             $errno = curl_errno($ch);
             $errstr = curl_error($ch);
             curl_close($ch);
-            throw new Exception("cURL error: [$errno] $errstr");
+            throw new \Exception("cURL error: [$errno] $errstr");
         }
         $info = curl_getinfo($ch);
         $http_code = $info['http_code'];
         if ($http_code != 200) {
-            throw new Exception("PayPal responded with http code $http_code");
+            throw new \Exception("PayPal responded with http code $http_code");
         }
         curl_close($ch);
         // Check if PayPal verifies the IPN data, and if so, return true.

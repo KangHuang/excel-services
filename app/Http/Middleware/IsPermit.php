@@ -39,6 +39,8 @@ class IsPermit {
             $usersPermit = $this->service_gestion->getById($request->service_id)->users()->get();
             if ($usersPermit->contains($user_id))
                 return $next($request);
+            else
+                return redirect('/service/payment/'.$request->service_id);
         }
         
         //If a staff's manager is permitted
@@ -48,6 +50,8 @@ class IsPermit {
             foreach ($managers as $manager){
                 if($usersPermit->contains($manager->id))
                     return $next($request);
+                else
+                    return redirect('/services')->with('error', 'Sorry, you do not have access to this service');
             }
         }
         
@@ -56,7 +60,7 @@ class IsPermit {
             if($services->contains($request->service_id))
                 return $next($request);
         }
-        return redirect('/services')->with('error', 'Sorry, you do not have access to this service');
+        return redirect('/services')->with('error', 'Please log in');
     }
 
 }

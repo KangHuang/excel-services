@@ -281,5 +281,16 @@ class ServiceController extends Controller {
         return response()->json();
     }
     
+    /**
+     * establish a payment
+     *
+     * @param  App\Http\Requests\SearchRequest $request $service_id
+     * @return Response
+     */
+    public function makePayment(Request $request, $service_id) {
+        $service = $this->service_gestion->getById($service_id);
+        return view('front.service.payment', compact('service'));
+    }
+    
 
 }

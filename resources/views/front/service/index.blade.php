@@ -7,6 +7,12 @@
 </div>
 @endif	
 
+@if(session()->has('pay'))
+<div class="row">
+	@include('partials/error', ['type' => 'success', 'message' => session('error')])
+</div>
+@endif	
+
     <div class="row">
 
         @foreach($posts as $post)

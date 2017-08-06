@@ -6,7 +6,12 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
 class VerifyCsrfToken extends BaseVerifier {
 
  
-	/**
+    
+    
+    protected $except = [
+        'ipnListen',
+    ];
+    /**
 	 * Handle an incoming request.
 	 *
 	 * @param  \Illuminate\Http\Request  $request

@@ -173,7 +173,8 @@ class PaymentController extends Controller {
         $verified = $ipn->verifyIPN();
         if ($verified) {
             if($_POST['txn_type']=='express_checkout'){
-                
+                    \Illuminate\Support\Facades\Log::info('paysuc');
+
             }
         }
 // Reply with an empty 200 response to indicate to paypal the IPN was received correctly.
@@ -289,8 +290,6 @@ class PaypalIPN
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
         
-                \Illuminate\Support\Facades\Log::info('ipnstart2'.$ch);
-
         $res = curl_exec($ch);
         if ( ! ($res)) {
             $errno = curl_errno($ch);

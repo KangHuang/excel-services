@@ -48,7 +48,7 @@ class PaymentController extends Controller {
 // Specify a payee with that user's email or merchant id
 // Merchant Id can be found at https://www.paypal.com/businessprofile/settings/
         $payee = new Payee();
-        $payee->setEmail("huangkang2016-payee1@gmail.com");
+        $payee->setEmail("huangkang2016-payee1@gmai2.com");
 // ### Transaction
 // A transaction defines the contract of a
 // payment - what is the payment for and who

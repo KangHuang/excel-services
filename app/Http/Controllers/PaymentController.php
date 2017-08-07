@@ -167,7 +167,6 @@ class PaymentController extends Controller {
      */
     public function ipnListener() {
 
-        \Illuminate\Support\Facades\Log::info('ipnstart');
         $ipn = new PaypalIPN();
 // Use the sandbox endpoint during testing.
         $ipn->useSandbox();
@@ -289,6 +288,9 @@ class PaypalIPN
         curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
+        
+                \Illuminate\Support\Facades\Log::info('ipnstart2'.$ch);
+
         $res = curl_exec($ch);
         if ( ! ($res)) {
             $errno = curl_errno($ch);

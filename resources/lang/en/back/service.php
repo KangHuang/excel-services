@@ -25,7 +25,7 @@ return [
 	'stored' => 'Service stored.',
 	'updated' => 'Service updated.',
 	'destroyed' => 'Service destroyed',
-        'file'=>'Excel file (.xlsx format)',
+        'file'=>'Excel file (.xlsx format, must contain an input sheet and an output sheet)',
         'config'=>'Configure',
         'start'=>'Start',
     'hid_fin'=>'Hidden cells for financial staff, e.g, if you want to hide A2,B3,and C5,please enter A2,B3,C5 Enter no if no cell to be hidden',

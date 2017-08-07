@@ -30,7 +30,7 @@ class PaymentController extends Controller {
      *
      * @return 
      */
-    public function createPayment() {
+    public function createPayment($service_id) {
         // ### Payer
 // A resource representing a Payer that funds a payment
 // For paypal account payments, set payment method
@@ -43,7 +43,7 @@ class PaymentController extends Controller {
 // such as shipping, tax.
         $amount = new Amount();
         $amount->setCurrency("GBP")
-                ->setTotal(66);
+                ->setTotal(16);
 // ### Payee
 // Specify a payee with that user's email or merchant id
 // Merchant Id can be found at https://www.paypal.com/businessprofile/settings/

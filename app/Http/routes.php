@@ -19,7 +19,7 @@ Route::group(['middleware' => ['web']], function () {
             ]);
         
         //PAYMENT
-        Route::get('service/payment', ['uses'=> 'PaymentController@createPayment','middleware' => 'manager']);
+        Route::get('service/payment/{service_id}', ['uses'=> 'PaymentController@createPayment','middleware' => 'manager']);
         Route::get('service/executePayment', ['uses'=> 'PaymentController@executePayment','middleware' => 'manager']);
         Route::post('ipnListen',['uses'=> 'PaymentController@ipnListener']);
 

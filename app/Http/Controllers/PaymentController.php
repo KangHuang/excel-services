@@ -30,7 +30,7 @@ class PaymentController extends Controller {
      *
      * @return 
      */
-    public function createPayment() {
+    public function createPayment($service_id) {
         // ### Payer
 // A resource representing a Payer that funds a payment
 // For paypal account payments, set payment method

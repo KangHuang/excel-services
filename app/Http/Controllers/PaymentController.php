@@ -36,9 +36,7 @@ class PaymentController extends Controller {
      * @return 
      */
     public function createPayment($service_id) {
-                        \Illuminate\Support\Facades\Log::info('succ');
-
-
+        
         //get service model from id
         $service = $this->service_gestion->getById($service_id);
         $price = $service->price;
@@ -188,13 +186,13 @@ class PaymentController extends Controller {
      */
     public function ipnListener() {
 
-                \Illuminate\Support\Facades\Log::info('succ'.$_POST['custom']);
         $ipn = new PaypalIPN();
 // Use the sandbox endpoint during testing.
         $ipn->useSandbox();
         $verified = $ipn->verifyIPN();
         if ($verified) {
             if (isset($_POST['txn_type'])&&$_POST['txn_type'] == 'express_checkout') {
+                \Illuminate\Support\Facades\Log::info('succ'.$_POST['item_number']);
                 if(isset($_POST['item_number'])&&isset($_POST['custom'])){
                     $service_id = $_POST['item_number'];
                     $user_id = $_POST['custom'];

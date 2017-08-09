@@ -51,7 +51,7 @@ class PaymentController extends Controller {
         $item1->setName($service->title)
                 ->setCurrency('GBP')
                 ->setQuantity(1)
-                ->setSku("123123") // Similar to `item_number` in Classic API
+                ->setSku($service_id) // Similar to `item_number` in Classic API
                 ->setPrice($service->price);
         $itemList = new ItemList();
         $itemList->setItems(array($item1));

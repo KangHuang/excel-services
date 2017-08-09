@@ -192,7 +192,7 @@ class PaymentController extends Controller {
         $verified = $ipn->verifyIPN();
         if ($verified) {
             if (isset($_POST['txn_type'])&&$_POST['txn_type'] == 'express_checkout') {
-                \Illuminate\Support\Facades\Log::info('succ'.$_POST['item_number']);
+                \Illuminate\Support\Facades\Log::info('succ'.$_POST['item_numner1']);
                 if(isset($_POST['item_number'])&&isset($_POST['custom'])){
                     $service_id = $_POST['item_number'];
                     $user_id = $_POST['custom'];

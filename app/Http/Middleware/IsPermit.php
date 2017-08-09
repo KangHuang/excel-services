@@ -59,6 +59,9 @@ class IsPermit {
             $services = auth()->guard('providers')->user()->services()->get();
             if($services->contains($request->service_id))
                 return $next($request);
+            else
+                return redirect('/services')->with('error', 'Sorry, you do not have access to this service');
+                
         }
         return redirect('/services')->with('error', 'Please log in');
     }

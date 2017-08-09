@@ -7,7 +7,10 @@
 @endif	
 
 <div class="box">
-    <a href={{$approvalUrl}}>click to proceed payment</a>
+    <p>
+        This service costs <strong>&pound; {{$service->price}}</strong>. Now Paypal is accepted for payment.<br>
+    </p>
+    <a href={{$approvalUrl}}><img src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif"></a>
 </div>
 
 @stop

@@ -11,18 +11,23 @@ use PayPal\Api\Payment;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 use PayPal\Api\PaymentExecution;
+use PayPal\Api\Item,
+    PayPal\Api\ItemList;
+use App\Repositories\ServiceRepository;
 
 class PaymentController extends Controller {
 
     private $apiContext;
+    private $service_gestion;
 
-    public function __construct() {
+    public function __construct(ServiceRepository $service_gestion) {
         $this->apiContext = new ApiContext(
                 new OAuthTokenCredential(
                 'AR-jrkIvtn1GgorJm8iFYigICRAdRvuABkso2bpkJVPJuSDtZtsz1Hh4Ag-MuduM5Yizd1Aei-V9p3M9', // ClientID
                 'EPqV4chEaJrNIdtf-Cupfm5CoTLYQH1Yktu3h_PGjOfF1qdjfikefK-H9pNO889xrCW_WmFe1ggtAWOT'      // ClientSecret
                 )
         );
+        $this->service_gestion = $service_gestion;
     }
 
     /**
@@ -31,33 +36,48 @@ class PaymentController extends Controller {
      * @return 
      */
     public function createPayment($service_id) {
+
+        //get service model from id
+        $service = $this->service_gestion->getById($service_id);
+        $price = $service->price;
         // ### Payer
 // A resource representing a Payer that funds a payment
 // For paypal account payments, set payment method
 // to 'paypal'.
         $payer = new Payer();
         $payer->setPaymentMethod("paypal");
+
+        $item1 = new Item();
+        $item1->setName($service->title)
+                ->setCurrency('GBP')
+                ->setQuantity(1)
+                ->setSku("123123") // Similar to `item_number` in Classic API
+                ->setPrice($service->price);
+        $itemList = new ItemList();
+        $itemList->setItems(array($item1));
 // ### Amount
 // Lets you specify a payment amount.
 // You can also specify additional details
 // such as shipping, tax.
         $amount = new Amount();
         $amount->setCurrency("GBP")
-                ->setTotal(16);
+                ->setTotal($price);
 // ### Payee
 // Specify a payee with that user's email or merchant id
 // Merchant Id can be found at https://www.paypal.com/businessprofile/settings/
         $payee = new Payee();
-        $payee->setEmail("huangkang2016-payee@gmail.com");
+        $payee->setEmail($service->provider->email);
 // ### Transaction
 // A transaction defines the contract of a
 // payment - what is the payment for and who
 // is fulfilling it.
         $transaction = new Transaction();
         $transaction->setAmount($amount)
+                ->setItemList($itemList)
                 ->setDescription("Service Payment")
                 ->setPayee($payee)
-                ->setInvoiceNumber(uniqid());
+                ->setInvoiceNumber(uniqid())
+                ->setCustom(auth()->guard('users')->id());
 // ### Redirect urls
 // Set the urls that the buyer must be redirected to after
 // payment approval/ cancellation.
@@ -73,8 +93,6 @@ class PaymentController extends Controller {
                 ->setPayer($payer)
                 ->setRedirectUrls($redirectUrls)
                 ->setTransactions(array($transaction));
-// For Sample Purposes Only.
-        $request = clone $payment;
 // ### Create Payment
 // Create a payment by calling the 'create' method
 // passing it a valid apiContext.
@@ -93,7 +111,8 @@ class PaymentController extends Controller {
 // the buyer to. Retrieve the url from the $payment->getApprovalLink()
 // method
         $approvalUrl = $payment->getApprovalLink();
-        return view('front.service.payment', compact('approvalUrl'));
+
+        return view('front.service.payment', compact('approvalUrl', 'service'));
     }
 
     /*
@@ -172,9 +191,8 @@ class PaymentController extends Controller {
         $ipn->useSandbox();
         $verified = $ipn->verifyIPN();
         if ($verified) {
-            if($_POST['txn_type']=='express_checkout'){
-                    \Illuminate\Support\Facades\Log::info('paysuc');
-
+            if ($_POST['txn_type'] == 'express_checkout') {
+                \Illuminate\Support\Facades\Log::info('succ'.$_POST['custom']);
             }
         }
 // Reply with an empty 200 response to indicate to paypal the IPN was received correctly.
@@ -183,55 +201,60 @@ class PaymentController extends Controller {
 
 }
 
+class PaypalIPN {
 
-class PaypalIPN
-{
     /**
      * @var bool $use_sandbox     Indicates if the sandbox endpoint is used.
      */
     private $use_sandbox = false;
+
     /**
      * @var bool $use_local_certs Indicates if the local certificates are used.
      */
     private $use_local_certs = true;
+
     /** Production Postback URL */
     const VERIFY_URI = 'https://ipnpb.paypal.com/cgi-bin/webscr';
+
     /** Sandbox Postback URL */
     const SANDBOX_VERIFY_URI = 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
+
     /** Response from PayPal indicating validation was successful */
     const VALID = 'VERIFIED';
+
     /** Response from PayPal indicating validation failed */
     const INVALID = 'INVALID';
+
     /**
      * Sets the IPN verification to sandbox mode (for use when testing,
      * should not be enabled in production).
      * @return void
      */
-    public function useSandbox()
-    {
+    public function useSandbox() {
         $this->use_sandbox = true;
     }
+
     /**
      * Sets curl to use php curl's built in certs (may be required in some
      * environments).
      * @return void
      */
-    public function usePHPCerts()
-    {
+    public function usePHPCerts() {
         $this->use_local_certs = false;
     }
+
     /**
      * Determine endpoint to post the verification data to.
      * @return string
      */
-    public function getPaypalUri()
-    {
+    public function getPaypalUri() {
         if ($this->use_sandbox) {
             return self::SANDBOX_VERIFY_URI;
         } else {
             return self::VERIFY_URI;
         }
     }
+
     /**
      * Verification Function
      * Sends the incoming post data back to PayPal using the cURL library.
@@ -239,9 +262,8 @@ class PaypalIPN
      * @return bool
      * @throws Exception
      */
-    public function verifyIPN()
-    {
-        if ( ! count($_POST)) {
+    public function verifyIPN() {
+        if (!count($_POST)) {
             throw new Exception("Missing POST Data");
         }
         $raw_post_data = file_get_contents('php://input');
@@ -289,9 +311,9 @@ class PaypalIPN
         curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
-        
+
         $res = curl_exec($ch);
-        if ( ! ($res)) {
+        if (!($res)) {
             $errno = curl_errno($ch);
             $errstr = curl_error($ch);
             curl_close($ch);
@@ -310,4 +332,5 @@ class PaypalIPN
             return false;
         }
     }
+
 }

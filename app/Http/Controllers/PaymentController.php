@@ -186,7 +186,9 @@ class PaymentController extends Controller {
      */
     public function ipnListener() {
         \Illuminate\Support\Facades\Log::info('start');
-
+        foreach ($_POST as $key=>$val){
+            \Illuminate\Support\Facades\Log::info($key.' ');
+        }
 
         $ipn = new PaypalIPN();
 // Use the sandbox endpoint during testing.
@@ -194,8 +196,9 @@ class PaymentController extends Controller {
         $verified = $ipn->verifyIPN();
         if ($verified) {
             if (isset($_POST['txn_type']) && $_POST['txn_type'] == 'express_checkout') {
-                \Illuminate\Support\Facades\Log::info('succ' . $_POST['item_number1']);
                 if (isset($_POST['item_number']) && isset($_POST['custom'])) {
+                    
+                    //create link to authorize users
                     $service_id = $_POST['item_number'];
                     $user_id = $_POST['custom'];
                     $this->service_gestion->getById($service_id)->users()->attach($user_id);

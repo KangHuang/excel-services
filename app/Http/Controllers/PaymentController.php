@@ -193,7 +193,7 @@ class PaymentController extends Controller {
         $ipn->useSandbox();
         $verified = $ipn->verifyIPN();
         if ($verified) {
-            \Illuminate\Support\Facades\Log::info('verified');
+            \Illuminate\Support\Facades\Log::info('verified '.$_POST['txn_type']);
 
             if (isset($_POST['txn_type']) && $_POST['txn_type'] == 'express_checkout') {
                 if (isset($_POST['item_number1']) && isset($_POST['custom'])) {

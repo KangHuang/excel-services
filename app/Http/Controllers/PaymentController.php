@@ -27,6 +27,21 @@ class PaymentController extends Controller {
                 'EAftwcy0Fa7hscs6sVTpW38MzPVj0XC6POL5P1OnyRS7d3Z3hSW5W4W4PP8EpnoJvElPJ_vGHi5CM7nL'      // ClientSecret
                 )
         );
+        // Comment this line out and uncomment the PP_CONFIG_PATH
+        // 'define' block if you want to use static file
+        // based configuration
+        $this->apiContext->setConfig(
+                array(
+                    'mode' => 'live',
+                    'log.LogEnabled' => true,
+                    'log.FileName' => public_path('../storage/logs/PayPal.log'),
+                    'log.LogLevel' => 'INFO', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                //    'cache.enabled' => true,
+                // 'http.CURLOPT_CONNECTTIMEOUT' => 30
+                // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
+                //'log.AdapterFactory' => '\PayPal\Log\DefaultLogFactory' // Factory class implementing \PayPal\Log\PayPalLogFactory
+                )
+        );
         $this->service_gestion = $service_gestion;
     }
 

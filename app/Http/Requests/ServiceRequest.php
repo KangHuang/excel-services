@@ -13,7 +13,7 @@ class ServiceRequest extends Request {
 			'title' => 'required|max:100|unique:services',
 			'description' => 'required|max:10000',
 			'filename' => 'required|mimes:xlsx|unique:services',
-                        'price' => 'required|float',
+                        'price' => 'required|numeric',
                         'hid_fin' => 'required|max:1000',
                         'hid_tec' => 'required|max:1000',                        
 		];

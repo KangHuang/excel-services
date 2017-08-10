@@ -23,8 +23,8 @@ class PaymentController extends Controller {
     public function __construct(ServiceRepository $service_gestion) {
         $this->apiContext = new ApiContext(
                 new OAuthTokenCredential(
-                'AR-jrkIvtn1GgorJm8iFYigICRAdRvuABkso2bpkJVPJuSDtZtsz1Hh4Ag-MuduM5Yizd1Aei-V9p3M9', // ClientID
-                'EPqV4chEaJrNIdtf-Cupfm5CoTLYQH1Yktu3h_PGjOfF1qdjfikefK-H9pNO889xrCW_WmFe1ggtAWOT'      // ClientSecret
+                'ARGHv_IvTYqQemReiRpAroo8_v3SQu1XuXTNRoI3AvwC2-IaC6aLd4vq8BgOhGVXjT18w4ekTXaPlumw', // ClientID
+                'EAftwcy0Fa7hscs6sVTpW38MzPVj0XC6POL5P1OnyRS7d3Z3hSW5W4W4PP8EpnoJvElPJ_vGHi5CM7nL'      // ClientSecret
                 )
         );
         $this->service_gestion = $service_gestion;
@@ -189,7 +189,7 @@ class PaymentController extends Controller {
 
         $ipn = new PaypalIPN();
 // Use the sandbox endpoint during testing.
-        $ipn->useSandbox();
+//        $ipn->useSandbox();
         $verified = $ipn->verifyIPN();
         if ($verified) {
 

@@ -18,7 +18,7 @@ class CreateServicesTable extends Migration {
 			$table->string('title', 255)->unique();
 			$table->text('description');
                         $table->string('filename', 64)->unique();
-                        $table->integer('price')->unsigned();
+                        $table->float('price')->unsigned();
 			$table->boolean('seen')->default(false);
 			$table->boolean('active')->default(false);
 			$table->integer('provider_id')->unsigned();

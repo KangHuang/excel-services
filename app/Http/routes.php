@@ -25,8 +25,8 @@ Route::group(['middleware' => ['web']], function () {
 
         //manage services
         Route::post('service/create', ['uses'=> 'ServiceController@store','middleware' => 'admin']);  
-        Route::post('service/destroy/{service_id}', ['uses'=> 'ServiceController@destroy','middleware' => 'admin']);  
-        Route::post('service/config/{service_id}', ['uses'=> 'ServiceController@config','middleware' => 'admin']);  
+        Route::post('service/destroy/{service_id}', ['uses'=> 'ServiceController@destroy','middleware' => 'permit']);  
+        Route::post('service/config/{service_id}', ['uses'=> 'ServiceController@config','middleware' => 'permit']);  
         
         
         //perform phpexcel

@@ -88,7 +88,7 @@
             $type = $sheet->getCellByColumnAndRow($col, $row)->getDataType();
             $value = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
             if ($type == PHPExcel_Cell_DataType::TYPE_NUMERIC)
-                echo "<td><input type='text' value='$value' name='cellvalue[$col][$row]'></input></td>";
+                echo "<td><input type='text' value='$value' name='cellvalue[$col][$row]' pattern='[+-]?([0-9]*[.])?[0-9]+' required></input></td>";
             else
                 echo "<td><input type='text' value='$value' readonly></input></td>";
         }

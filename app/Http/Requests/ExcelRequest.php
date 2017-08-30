@@ -12,7 +12,7 @@ class ExcelRequest extends Request {
 	public function rules()
 	{
 		return [
-			'cellvalue' => 'required',
+			'cellvalue.*.*' => 'required|numeric',
 		];
 	}
 

@@ -30,7 +30,7 @@ Route::group(['middleware' => ['web']], function () {
         
         
         //perform phpexcel
-	Route::get('service/run/{service_id}', ['uses' => 'ExcelController@display','middleware' => 'permit']);
+	Route::get('service/run/{service_id}', ['uses' => 'ExcelController@calculate','middleware' => 'permit']);
         Route::post('service/run/{service_id}', ['uses' => 'ExcelController@calculate','middleware' => 'permit']);
         
         //ajax

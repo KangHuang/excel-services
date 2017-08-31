@@ -23,7 +23,6 @@
 							<th class="col-lg-1">{{ trans('back/messages.name') }}</th>
 							<th class="col-lg-1">{{ trans('back/messages.email') }}</th>
 							<th class="col-lg-1">{{ trans('back/messages.date') }}</th>
-							<th class="col-lg-1">{{ trans('back/messages.seen') }}</th>
 							<th class="col-lg-1"></th>
 						</tr>
 					</thead>
@@ -32,7 +31,6 @@
 							<td class="text-primary"><strong>{{ $message->name }}</strong></td>
 							<td>{!! HTML::mailto($message->email, $message->email) !!}</a></td>
 							<td>{{ $message->created_at }}</td>
-							<td>{!! Form::checkbox('vu', $message->id, $message->seen) !!}</td>
 							<td>
 							{!! Form::open(['method' => 'DELETE', 'route' => ['contact.destroy', $message->id]]) !!}
 								{!! Form::destroy(trans('back/messages.destroy'), trans('back/messages.destroy-warning'), 'btn-xs') !!}
@@ -51,33 +49,5 @@
 @stop
 
 @section('scripts')
-
-	<script>
-		
-    $(function() {
-			$(':checkbox').change(function() {     
-				$(this).parents('.panel').toggleClass('panel-warning').toggleClass('panel-default');
-				$(this).hide().parent().append('<i class="fa fa-refresh fa-spin"></i>');
-				var token = $('input[name="_token"]').val();
-				$.ajax({
-					url: 'contact/' + this.value,
-					type: 'PUT',
-					data: "seen=" + this.checked + "&_token=" + token
-				})
-				.done(function() {
-					$('.fa-spin').remove();
-					$('input[type="checkbox"]:hidden').show();
-				})
-				.fail(function() {
-					$('.fa-spin').remove();
-					var chk = $('input[type="checkbox"]:hidden');
-					chk.parents('.panel').toggleClass('panel-warning').toggleClass('panel-default');
-					chk.show().prop('checked', chk.is(':checked') ? null:'checked');
-					alert('{{ trans('back/messages.fail') }}');
-				});
-			});
-		});
-
-	</script>
 
 @stop

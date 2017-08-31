@@ -5,7 +5,7 @@ return [
 	'comments' => 'Comments',
 	'author' => 'Author',		
 	'date' => 'Date',
-	'post' => 'Post',
+	'service' => 'Service',
 	'valid' => 'valid',
 	'seen' => 'seen',
 	'destroy' => 'Destroy',

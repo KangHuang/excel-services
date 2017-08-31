@@ -12,5 +12,6 @@ return [
 	'contribution' => 'Contribution',
 	'redaction' => 'Redaction',
 	'logout' => 'Logout',
-        'team' => 'Team'
+        'team' => 'Team',
+        'message' => 'Message'
 ];

@@ -69,6 +69,11 @@
 								{!! link_to('user/show', trans('front/site.team')) !!}
 							</li>
 						@endif
+                                                @if(session('statut') == 'dir')
+							<li {!! classActivePath('cont   act/create') !!}>
+								{!! link_to('contact', trans('front/site.message')) !!}
+							</li>
+						@endif
 						@if(Request::is('auth/register'))
 							<li class="active">
 								{!! link_to('auth/register', trans('front/site.register')) !!}

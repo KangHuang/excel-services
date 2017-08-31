@@ -7,9 +7,9 @@
 </div>
 @endif	
 
-@if(session()->has('pay'))
+@if(session()->has('ok'))
 <div class="row">
-	@include('partials/error', ['type' => 'success', 'message' => session('pay')])
+	@include('partials/error', ['type' => 'success', 'message' => session('ok')])
 </div>
 @endif	
 

@@ -126,8 +126,10 @@ class PaymentController extends Controller {
 // the buyer to. Retrieve the url from the $payment->getApprovalLink()
 // method
         $approvalUrl = $payment->getApprovalLink();
+        
+        $comments = $service->comments;
 
-        return view('front.service.payment', compact('approvalUrl', 'service'));
+        return view('front.service.payment', compact('approvalUrl', 'service','comments'));
     }
 
     /*
@@ -164,7 +166,7 @@ class PaymentController extends Controller {
             } catch (Exception $ex) {
                 exit(1);
             }
-            return redirect('services')->with('pay', 'The payment is processing. It may take a few minutes');
+            return redirect('services')->with('ok', 'The payment is processing. It may take a few minutes');
         } else {
             exit;
         }

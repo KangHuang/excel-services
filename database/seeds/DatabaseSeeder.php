@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Role, App\Models\User, App\Models\Contact, App\Models\Provider, App\Models\Service, App\Models\Comment, App\Models\Relation, App\Models\UserRelation;
 use App\Services\LoremIpsumGenerator;
+use Illuminate\Support\Facades\Redis;
 
 class DatabaseSeeder extends Seeder {
 
@@ -31,6 +32,11 @@ class DatabaseSeeder extends Seeder {
 		Role::create([
 			'title' => 'Financial staff',
 			'slug' => 'fin'
+		]);
+                
+                Role::create([
+			'title' => 'Director',
+			'slug' => 'dir'
 		]);
 
 		User::create([
@@ -60,6 +66,22 @@ class DatabaseSeeder extends Seeder {
 			'confirmed' => true
 		]);
                 
+                User::create([
+			'username' => 'FirstDirector',
+			'email' => 'dir@la.fr',
+			'password' => bcrypt('123'),
+			'role_id' => 4,
+			'confirmed' => true
+		]);
+                
+                User::create([
+			'username' => 'SecondManager',
+			'email' => 'sec@la.fr',
+			'password' => bcrypt('123'),
+			'role_id' => 1,
+			'confirmed' => true
+		]);
+                
                 Provider::create([
 			'username' => 'FirstProvider',
 			'email' => 'pro@la.fr',
@@ -68,33 +90,33 @@ class DatabaseSeeder extends Seeder {
 		]);
 
 		Contact::create([
-			'name' => 'Dupont',
-			'email' => 'dupont@la.fr',
-			'text' => 'Lorem ipsum inceptos malesuada leo fusce tortor sociosqu semper, facilisis semper class tempus faucibus tristique duis eros, cubilia quisque habitasse aliquam fringilla orci non. Vel laoreet dolor enim justo facilisis neque accumsan, in ad venenatis hac per dictumst nulla ligula, donec mollis massa porttitor ullamcorper risus. Eu platea fringilla, habitasse.'
+			'name' => 'Peter',
+			'email' => 'duiont@la.fr',
+			'text' => 'Contact message created by Peter'
 		]);
 
 		Contact::create([
-			'name' => 'Durand',
-			'email' => 'durand@la.fr',
-			'text' => ' Lorem ipsum erat non elit ultrices placerat, netus metus feugiat non conubia fusce porttitor, sociosqu diam commodo metus in. Himenaeos vitae aptent consequat luctus purus eleifend enim, sollicitudin eleifend porta malesuada ac class conubia, condimentum mauris facilisis conubia quis scelerisque. Lacinia tempus nullam felis fusce ac potenti netus ornare semper molestie, iaculis fermentum ornare curabitur tincidunt imperdiet scelerisque imperdiet euismod.'
+			'name' => 'Alice',
+			'email' => 'duljiand@la.fr',
+			'text' => 'message of alice'
 		]);
 
 		Contact::create([
-			'name' => 'Martin',
-			'email' => 'martin@la.fr',
-			'text' => 'Lorem ipsum tempor netus aenean ligula habitant vehicula tempor ultrices, placerat sociosqu ultrices consectetur ullamcorper tincidunt quisque tellus, ante nostra euismod nec suspendisse sem curabitur elit. Malesuada lacus viverra sagittis sit ornare orci, augue nullam adipiscing pulvinar libero aliquam vestibulum, platea cursus pellentesque leo dui. Lectus curabitur euismod ad, erat.',
+			'name' => 'Tom',
+			'email' => 'marljtin@la.fr',
+			'text' => 'message of Tom',
 			'seen' => true
 		]);
 
 		Service::create([
 			'title' => 'Service demo',
-			'description' => '<img alt="" src="/filemanager/userfiles/user2/rouge-shell.png" style="float:left; height:128px; width:128px" />' . $lipsum->getContent(50),
+			'description' => 'Test the first proprietary service',
 			'filename' => 'demo.xlsx', 
-                        'price' => 16,
+                        'price' => 0.01,
 			'active' => true,
 			'provider_id' => 1,
-                        'hid_tec' => 'A2,B3',
-                        'hid_fin' => 'no',
+                        'hid_tec' => 'A2,B2,C2',
+                        'hid_fin' => 'A3,B3,C3',
 		]);
 
 		Comment::create([
@@ -123,6 +145,8 @@ class DatabaseSeeder extends Seeder {
 			'manager_id' => 1,
 			'staff_id' => 3,
 		]);
+                
+                Redis::command('flushall');
 
 	}
 

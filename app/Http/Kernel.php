@@ -46,6 +46,8 @@ class Kernel extends HttpKernel {
 		'ajax' => \App\Http\Middleware\IsAjax::class,
                 'manager' => \App\Http\Middleware\IsManager::class,
                 'permit' => \App\Http\Middleware\IsPermit::class,
+                'director' => \App\Http\Middleware\IsDirector::class,
+                'usepermit' =>  \App\Http\Middleware\IsUserPermit::class,
 	];
 
 }

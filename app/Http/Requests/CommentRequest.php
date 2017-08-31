@@ -9,9 +9,9 @@ class CommentRequest extends Request {
 	 */
 	public function rules()
 	{
-		$id = $this->comment;
 		return [
-			'comments' . $id => 'required|max:65000',
+			'content'=> 'required|max:65000',
+                        'service_id' => 'required|integer'
 		];
 	}
 

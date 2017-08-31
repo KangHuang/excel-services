@@ -1,9 +1,11 @@
 @extends('front.template')
 
 @section('main')
-<div>
-    <?php
 
+
+
+<div  class="col-sm-12">
+    <?php
     $hidearray_tec = array();
     $hidearray_fin = array();
 
@@ -80,6 +82,21 @@
     }
     echo '</center>';
     ?>
-
 </div>
+
+@if(session('statut') == 'manager'||session('statut') == 'tec'||session('statut') == 'fin')
+<div class="col-sm-12">
+    <br>
+    <br>
+    <center>
+        {!! Form::open(['url' => 'comment', 'method' => 'post']) !!}	
+        {!! Form::control('text', 0, 'content', $errors,'Comments') !!}
+        {!! Form::hidden('service_id', $service->id) !!}
+
+        {!! Form::submit(trans('front/form.send')) !!}
+        {!! Form::close() !!}
+    </center>
+</div>
+@endif
+
 @stop

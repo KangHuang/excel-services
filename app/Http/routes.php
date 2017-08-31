@@ -40,9 +40,7 @@ Route::group(['middleware' => ['web']], function () {
 
 
 	// Comment
-	Route::resource('comment', 'CommentController', [
-		'except' => ['create', 'show']
-	]);
+	Route::resource('comment', 'CommentController');
 
 	Route::put('commentseen/{id}', 'CommentController@updateSeen');
 	Route::put('uservalid/{id}', 'CommentController@valid');
@@ -50,7 +48,7 @@ Route::group(['middleware' => ['web']], function () {
 
 	// Contact
 	Route::resource('contact', 'ContactController', [
-		'except' => ['show', 'edit']
+		'middleware' => ['director']
 	]);
 
 

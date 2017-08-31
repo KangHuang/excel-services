@@ -24,7 +24,7 @@ class CommentRepository extends BaseRepository {
 	public function index($n)
 	{
 		return $this->model
-		->with('post', 'user')
+		->with('service', 'user')
 		->oldest('seen')
 		->latest()
 		->paginate($n);
@@ -41,41 +41,9 @@ class CommentRepository extends BaseRepository {
 	{
 		$comment = new $this->model;	
 
-		$comment->content = $inputs['comments'];
-		$comment->post_id = $inputs['post_id'];
+		$comment->content = $inputs['content'];
+		$comment->service_id = $inputs['service_id'];
 		$comment->user_id = $user_id;
-
-		$comment->save();
-	}
-
-	/**
-	 * Update a comment.
-	 *
-	 * @param  string $commentaire
-	 * @param  int    $id
-	 * @return void
-	 */
- 	public function updateContent($content, $id)
-	{
-		$comment = $this->getById($id);	
-
-		$comment->content = $content;
-
-		$comment->save();
-	}
-
-	/**
-	 * Update a comment.
-	 *
-	 * @param  bool  $vu
-	 * @param  int   $id
-	 * @return void
-	 */
-	public function update($seen, $id)
-	{
-		$comment = $this->getById($id);
-
-		$comment->seen = $seen == 'true';
 
 		$comment->save();
 	}

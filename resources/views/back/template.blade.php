@@ -62,13 +62,15 @@
             <!-- Menu de la barre latérale -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    @if(session('statut') == 'admin')
+                    @if(session('statut') == 'dir')
                         <li {!! classActivePath('contact') !!}>
                             <a href="{!! url('contact') !!}"><span class="fa fa-fw fa-envelope"></span> {{ trans('back/admin.messages') }}</a>
                         </li>  
                         <li {!! classActivePath('comment') !!}>
                             <a href="{!! url('comment') !!}"><span class="fa fa-fw fa-comments"></span> {{ trans('back/admin.comments') }}</a>
                         </li> 
+                    @endif    
+                    @if(session('statut') == 'admin')
                         <li {!! classActiveSegment(1, 'service') !!}>
                         <a href="#" data-toggle="collapse" data-target="#articlemenu"><span class="fa fa-fw fa-pencil"></span> {{ trans('back/admin.services') }} <span class="fa fa-fw fa-caret-down"></a>
                         <ul id="articlemenu" class="collapse">

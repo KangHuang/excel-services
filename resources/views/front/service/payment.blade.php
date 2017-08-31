@@ -8,7 +8,8 @@
 
 <div class="box">
     <p>
-        This service costs <strong>&pound; {{$service->price}}</strong>. Now Paypal is accepted for payment.<br>
+        This service costs <strong>&pound; {{$service->price}}</strong>. Now Paypal is accepted for payment.
+        If your payment is successful but still don't have the access, do not pay again. Please contact the service provider <strong>{{$service->provider->email}}</strong><br>
     </p>
     <a href={{$approvalUrl}}><img src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif"></a>
 </div>

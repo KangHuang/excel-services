@@ -4,6 +4,11 @@
               <td>{{ $post->created_at }}</td> 
               <td>{!! Form::checkbox('active', $post->id, $post->active) !!}</td>
                <td>
+              {!! Form::open(['method' => 'get', 'url' => 'service/edit/'.$post->id]) !!}
+                {!! Form::submit(trans('back/service.edit')) !!}
+              {!! Form::close() !!}
+              </td>
+               <td>
               {!! Form::open(['method' => 'post', 'url' => 'service/config/'.$post->id]) !!}
                 {!! Form::submit(trans('back/service.config')) !!}
               {!! Form::close() !!}

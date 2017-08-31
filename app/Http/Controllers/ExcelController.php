@@ -7,8 +7,6 @@ use App\Jobs\ChangeLocale;
 use App\Http\Requests\ExcelRequest;
 use App\Repositories\ServiceRepository;
 
-require public_path('Classes/PHPExcel.php');
-
 use PHPExcel,
     PHPExcel_IOFactory,
     PHPExcel_Cell;
@@ -72,6 +70,15 @@ class ExcelController extends Controller {
             $objExcel = $objReader->load($file);
 
             $sheet = $objExcel->getSheetByName('input');
+            if ($sheet == null) {
+                if (session('statut') === 'admin')
+                    return redirect('service/order')->with('error', 'The format is incorrect, '
+                                    . 'please ensure input and output sheets are contained');
+                else
+                    return redirect('services')->with('error', 'There is something wrong with the service, '
+                                    . 'please contact the service provider');
+            }
+
             $lastRow = $sheet->getHighestRow();
             $lastColumn = $sheet->getHighestColumn();
             $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($lastColumn);
@@ -91,8 +98,16 @@ class ExcelController extends Controller {
             }
 
             $sheet2 = $objExcel->getSheetByName('output');
-            $lastRow2 = $sheet->getHighestRow();
-            $lastColumn2 = $sheet->getHighestColumn();
+            if ($sheet2 == null) {
+                if (session('statut') === 'admin')
+                    return redirect('service/order')->with('error', 'The format is incorrect, '
+                                    . 'please ensure input and output sheets are contained');
+                else
+                    return redirect('services')->with('error', 'There is something wrong with the service, '
+                                    . 'please contact the service provider');
+            }
+            $lastRow2 = $sheet2->getHighestRow();
+            $lastColumn2 = $sheet2->getHighestColumn();
             $highestColumnIndex2 = PHPExcel_Cell::columnIndexFromString($lastColumn);
             $lowestCoordinate = $this->getLowestRowCol($sheet2, $lastRow2, $highestColumnIndex2);
             $lowestRow2 = $lowestCoordinate[0];
@@ -106,24 +121,24 @@ class ExcelController extends Controller {
                 'hid_fin', $hid_fin, 'hid_tec', $hid_tec,
             ]);
         }
-        
-        else{
-            $service = $service_gestion->getById($service_id);
-            $objExcel = unserialize(Redis::command('hget',['service'.$service_id,'objExcel']));
-            $lastRow = (int)Redis::command('hget',['service'.$service_id,'lastRow']);
-            $lastRow2 = (int)Redis::command('hget',['service'.$service_id,'lastRow2']);
-            $highestColumnIndex = (int)Redis::command('hget',['service'.$service_id,'highestColumnIndex']);
-            $highestColumnIndex2 = (int)Redis::command('hget',['service'.$service_id,'highestColumnIndex2']);
-            $lowestRow = (int)Redis::command('hget',['service'.$service_id,'lowestRow']);
-            $lowestRow2 = (int)Redis::command('hget',['service'.$service_id,'lowestRow2']);
-            $lowestCol = (int)Redis::command('hget',['service'.$service_id,'lowestCol']);
-            $lowestCol2 = (int)Redis::command('hget',['service'.$service_id,'lowestCol2']);
-            $hid_fin = Redis::command('hget',['service'.$service_id,'hid_fin']);
-            $hid_tec = Redis::command('hget',['service'.$service_id,'hid_tec']);
 
-            
+        else {
+            $service = $service_gestion->getById($service_id);
+            $objExcel = unserialize(Redis::command('hget', ['service' . $service_id, 'objExcel']));
+            $lastRow = (int) Redis::command('hget', ['service' . $service_id, 'lastRow']);
+            $lastRow2 = (int) Redis::command('hget', ['service' . $service_id, 'lastRow2']);
+            $highestColumnIndex = (int) Redis::command('hget', ['service' . $service_id, 'highestColumnIndex']);
+            $highestColumnIndex2 = (int) Redis::command('hget', ['service' . $service_id, 'highestColumnIndex2']);
+            $lowestRow = (int) Redis::command('hget', ['service' . $service_id, 'lowestRow']);
+            $lowestRow2 = (int) Redis::command('hget', ['service' . $service_id, 'lowestRow2']);
+            $lowestCol = (int) Redis::command('hget', ['service' . $service_id, 'lowestCol']);
+            $lowestCol2 = (int) Redis::command('hget', ['service' . $service_id, 'lowestCol2']);
+            $hid_fin = Redis::command('hget', ['service' . $service_id, 'hid_fin']);
+            $hid_tec = Redis::command('hget', ['service' . $service_id, 'hid_tec']);
+
+
             $sheet = $objExcel->getSheetByName('input');
-            
+
             //enter input data and calculate
             if (isset($_POST['cellvalue'])) {
                 $cells = $_POST['cellvalue'];
@@ -133,19 +148,12 @@ class ExcelController extends Controller {
                     }
                 }
             }
-            
+
             $sheet2 = $objExcel->getSheetByName('output');
-            
         }
 
 
-        return view('front.service.excel', compact('service', 'sheet', 'sheet2', 
-                'lastRow', 'lastRow2', 
-                'highestColumnIndex', 'highestColumnIndex2', 
-                'lowestRow', 'lowestRow2', 
-                'lowestCol', 'lowestCol2',
-                'hid_fin', 'hid_tec', 
-                'user_role'));
+        return view('front.service.excel', compact('service', 'sheet', 'sheet2', 'lastRow', 'lastRow2', 'highestColumnIndex', 'highestColumnIndex2', 'lowestRow', 'lowestRow2', 'lowestCol', 'lowestCol2', 'hid_fin', 'hid_tec', 'user_role'));
     }
 
 }

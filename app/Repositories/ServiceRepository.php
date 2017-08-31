@@ -19,39 +19,39 @@ class ServiceRepository extends BaseRepository {
     /**
      * Create a new ServiceRepository instance.
      *
-     * @param  App\Models\Service $post
+     * @param  App\Models\Service $service
      * @param  App\Models\Comment $comment
      * @return void
      */
     public function __construct(
-    Service $post, Comment $comment) 
+    Service $service, Comment $comment) 
     {
-        $this->model = $post;
+        $this->model = $service;
         $this->comment = $comment;
     }
 
     /**
-     * Create or update a post.
+     * Create or update a service.
      *
-     * @param  App\Models\Service $post
+     * @param  App\Models\Service $service
      * @param  array  $inputs
      * @param  bool   $provider_id
      * @return App\Models\Service
      */
-    private function saveService($post, $inputs, $provider_id)
+    private function saveService($service, $inputs, $provider_id)
     {
 
-        $post->title = $inputs['title'];
-        $post->description = $inputs['description'];
-        $post->filename = $inputs['filename_ori'];
-        $post->price = $inputs['price'];
-        $post->active = isset($inputs['active']);
-        $post->provider_id = $provider_id;
-        $post->hid_fin = $inputs['hid_fin'];
-        $post->hid_tec = $inputs['hid_tec'];
-        $post->save();
+        $service->title = $inputs['title'];
+        $service->description = $inputs['description'];
+        $service->filename = $inputs['filename_ori'];
+        $service->price = $inputs['price'];
+        $service->active = isset($inputs['active']);
+        $service->provider_id = $provider_id;
+        $service->hid_fin = $inputs['hid_fin'];
+        $service->hid_tec = $inputs['hid_tec'];
+        $service->save();
 
-        return $post;
+        return $service;
     }
 
     /**
@@ -69,7 +69,7 @@ class ServiceRepository extends BaseRepository {
     }
 
     /**
-     * Get post collection.
+     * Get service collection.
      *
      * @param  int  $n
      * @return Illuminate\Support\Collection
@@ -82,7 +82,7 @@ class ServiceRepository extends BaseRepository {
     }
 
     /**
-     * Get post collection.
+     * Get service collection.
      *
      * @param  int  $n
      * @param  int  $id
@@ -117,7 +117,7 @@ class ServiceRepository extends BaseRepository {
     }
 
     /**
-     * Get post collection.
+     * Get service collection.
      *
      * @param  int     $n
      * @param  int     $provider_id
@@ -140,7 +140,7 @@ class ServiceRepository extends BaseRepository {
     }
 
     /**
-     * Get post collection.
+     * Get service collection.
      *
      * @param  string  $id
      * @return array
@@ -161,24 +161,24 @@ class ServiceRepository extends BaseRepository {
     }
 
     /**
-     * Get post collection.
+     * Get service collection.
      *
-     * @param  App\Models\Service $post
+     * @param  App\Models\Service $service
      * @return array
      */
-//    public function edit($post)
+//    public function edit($service)
 //    {
 //        $tags = [];
 //
-//        foreach ($post->tags as $tag) {
+//        foreach ($service->tags as $tag) {
 //            array_push($tags, $tag->tag);
 //        }
 //
-//        return compact('post', 'tags');
+//        return compact('service', 'tags');
 //    }
 
     /**
-     * Get post collection.
+     * Get service collection.
      *
      * @param  int  $id
      * @return array
@@ -189,38 +189,28 @@ class ServiceRepository extends BaseRepository {
 //    }
 
     /**
-     * Update a post.
+     * Update a service.
      *
      * @param  array  $inputs
-     * @param  App\Models\Service $post
+     * @param  App\Models\Service $service
      * @return void
      */
-    public function update($inputs, $post)
+    public function update($inputs, $id)
     {
-        $post = $this->saveService($post, $inputs);
+        $service = $this->getById($id);
 
-        // Tag gestion
-        $tags_id = [];
-        if (array_key_exists('tags', $inputs) && $inputs['tags'] != '') {
-
-            $tags = explode(',', $inputs['tags']);
-
-            foreach ($tags as $tag) {
-                $tag_ref = $this->tag->whereTag($tag)->first();
-                if (is_null($tag_ref)) {
-                    $tag_ref = new $this->tag();
-                    $tag_ref->tag = $tag;
-                    $tag_ref->save();
-                }
-                array_push($tags_id, $tag_ref->id);
-            }
-        }
-
-        $post->tags()->sync($tags_id);
+        $service->title = $inputs['title'];
+        $service->description = $inputs['description'];
+        $service->price = $inputs['price'];
+        $service->hid_fin = $inputs['hid_fin'];
+        $service->hid_tec = $inputs['hid_tec'];
+        $service->save();
+        
+        return $service;
     }
 
     /**
-     * Update "seen" in post.
+     * Update "seen" in service.
      *
      * @param  array  $inputs
      * @param  int    $id
@@ -228,15 +218,15 @@ class ServiceRepository extends BaseRepository {
      */
     public function updateSeen($inputs, $id)
     {
-        $post = $this->getById($id);
+        $service = $this->getById($id);
 
-        $post->seen = $inputs['seen'] == 'true';
+        $service->seen = $inputs['seen'] == 'true';
 
-        $post->save();
+        $service->save();
     }
 
     /**
-     * Update "active" in post.
+     * Update "active" in service.
      *
      * @param  array  $inputs
      * @param  int    $id
@@ -244,16 +234,16 @@ class ServiceRepository extends BaseRepository {
      */
     public function updateActive($inputs, $id)
     {
-        $post = $this->getById($id);
+        $service = $this->getById($id);
 
-        $post->active = $inputs['active'] == 'true';
+        $service->active = $inputs['active'] == 'true';
 
 
-        $post->save();
+        $service->save();
     }
 
     /**
-     * Create a post.
+     * Create a service.
      *
      * @param  array  $inputs
      * @param  int    $provider_id
@@ -261,30 +251,30 @@ class ServiceRepository extends BaseRepository {
      */
     public function store($inputs, $provider_id)
     {
-        $post = $this->saveService(new $this->model, $inputs, $provider_id);
+        $service = $this->saveService(new $this->model, $inputs, $provider_id);
 
     }
 
     /**
-     * Destroy a post.
+     * Destroy a service.
      *
-     * @param  App\Models\Service $post
+     * @param  App\Models\Service $service
      * @return void
      */
-    public function destroy($post) {
-        $post->users()->detach();
-        $post->delete();
+    public function destroy($service) {
+        $service->users()->detach();
+        $service->delete();
     }
 
     /**
-     * Get post price.
+     * Get service price.
      *
      * @param  int  $comment_id
      * @return string
      */
     public function getSlug($comment_id)
     {
-        return $this->comment->findOrFail($comment_id)->post->price;
+        return $this->comment->findOrFail($comment_id)->service->price;
     }
 
     /**

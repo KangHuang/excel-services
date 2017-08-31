@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-use App\Http\Requests\ServiceRequest;
+use App\Http\Requests\ServiceRequest,
+    App\Http\Requests\ServiceUpdateRequest;
 use App\Http\Requests\SearchRequest;
 use App\Repositories\ServiceRepository,
     App\Repositories\UserRepository,
@@ -34,7 +35,7 @@ class ServiceController extends Controller {
      * @var App\Repositories\ProviderRepository
      */
     protected $provider_gestion;
-    
+
     /**
      * The UserRepository instance.
      *
@@ -145,7 +146,7 @@ class ServiceController extends Controller {
         $users = $this->user_gestion->index(10, 'manager');
         $usersPermit = $this->service_gestion->getById($service_id)->users()->paginate(10);
         $post = $this->service_gestion->getById($service_id);
-        return view('back.service.config', compact('service_id','users','usersPermit','post'));
+        return view('back.service.config', compact('service_id', 'users', 'usersPermit', 'post'));
     }
 
     /**
@@ -156,8 +157,8 @@ class ServiceController extends Controller {
      */
     public function store(ServiceRequest $request) {
         $name = $request->file('filename')->getClientOriginalName();
-        
-        $unique_name = md5($name. time());
+
+        $unique_name = md5($name . time());
 
         $request->file('filename')->move('excel', $unique_name);
 
@@ -185,19 +186,15 @@ class ServiceController extends Controller {
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  App\Repositories\UserRepository $user_gestion
+     * @param  service id
      * @param  int  $id
      * @return Response
      */
-    public function edit(
-    UserRepository $user_gestion, $id) {
-        $post = $this->service_gestion->getByIdWithTags($id);
+    public function edit($service_id) {
 
-        $this->authorize('change', $post);
+        $service = $this->service_gestion->getById($service_id);
 
-        $url = config('medias.url');
-
-        return view('back.service.edit', array_merge($this->service_gestion->edit($post), compact('url')));
+        return view('back.service.edit', compact('service'));
     }
 
     /**
@@ -208,14 +205,10 @@ class ServiceController extends Controller {
      * @return Response
      */
     public function update(
-    PostRequest $request, $id) {
-        $post = $this->service_gestion->getById($id);
+    ServiceUpdateRequest $request, $service_id) {
+        $this->service_gestion->update($request->all(), $service_id);
 
-        $this->authorize('change', $post);
-
-        $this->service_gestion->update($request->all(), $post);
-
-        return redirect('service')->with('ok', trans('back/service.updated'));
+        return redirect('service/order')->with('ok', trans('back/service.updated'));
     }
 
     /**
@@ -264,8 +257,8 @@ class ServiceController extends Controller {
 
         return view('front.service.index', compact('posts', 'links', 'info'));
     }
-    
-     /**
+
+    /**
      * build relationship between service and user
      *
      * @param  App\Http\Requests\SearchRequest $request
@@ -273,14 +266,14 @@ class ServiceController extends Controller {
      */
     public function relation(Request $request, $user_id) {
         $service_id = $request->input('service_id');
-        if($request->input('active')=='true'){
+        if ($request->input('active') == 'true') {
             $this->service_gestion->getById($service_id)->users()->attach($user_id);
         } else {
             $this->service_gestion->getById($service_id)->users()->detach($user_id);
         }
         return response()->json();
     }
-    
+
     /**
      * establish a payment
      *
@@ -291,6 +284,5 @@ class ServiceController extends Controller {
         $service = $this->service_gestion->getById($service_id);
         return view('front.service.payment', compact('service'));
     }
-    
 
 }

@@ -2,6 +2,9 @@
 
 @section('main')
 
+@include('back.partials.entete', ['title' => trans('back/service.dashboard'), 'icone' => 'pencil', 'fil' => link_to('service/order', trans('back/service.services')) . ' / ' . trans('back/service.creation')])
+
+
 <h3>Permission configuration for service: <strong>{{ $post->title }}</strong></h3>
 
 <table class="table">

@@ -95,6 +95,8 @@
 
         {!! Form::submit(trans('front/form.send')) !!}
         {!! Form::close() !!}
+        
+        <p>If you have any question please contact the service provider <strong>{{$service->provider->email}}</strong></p>
     </center>
 </div>
 @endif

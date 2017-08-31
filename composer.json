@@ -11,7 +11,8 @@
         "bestmomo/filemanager": "1.1.*",
         "sarav/laravel-multiauth": "^0.0.7",
         "paypal/rest-api-sdk-php": "*",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "phpoffice/phpexcel": "^1.8"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

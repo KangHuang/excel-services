@@ -68,8 +68,8 @@ class DatabaseSeeder extends Seeder {
                 
                 User::create([
 			'username' => 'FirstDirector',
-			'email' => 'dir@la.fr',
-			'password' => bcrypt('123'),
+			'email' => 'wenshangxi2016@hmail.com',
+			'password' => bcrypt('jjbioenergy2016'),
 			'role_id' => 4,
 			'confirmed' => true
 		]);
@@ -84,7 +84,7 @@ class DatabaseSeeder extends Seeder {
                 
                 Provider::create([
 			'username' => 'FirstProvider',
-			'email' => 'pro@la.fr',
+			'email' => 'huangkang2016@gmail.com',
 			'password' => bcrypt('123'),
 			'confirmed' => true
 		]);

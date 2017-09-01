@@ -1,4 +1,4 @@
-## PHP platform for proprietary services performed by Excel
+## PHP platform for proprietary services powered by Excel
 
 This project is developed based on Laravel 5.2 ( https://laravel.com/docs/5.2 ) and its tutorial application provided by bestmomo (https://github.com/bestmomo/laravel5-example ) including the frontend templates and functions for email confirmation, password reset, etc. The work of this project is elaborated in the dissertation report 
 'developing cloud services for proprietary software'.
@@ -70,7 +70,7 @@ and restart apache server by
 
 Then performing testing at localhost.
 
-**Note**: The testing version of localhost cannot provide `IPNListener` function developed, i.e., the site can make a payment with PayPal but cannot receive IPN from PayPal server, hence cannot automatically authorize users' accessibility for a paid services.
+**Note**: The testing version of localhost cannot provide `IPNListener` function developed, i.e., the site can make a payment with PayPal but cannot receive IPN from PayPal server, hence cannot automatically authorize users' accessibility for paid services.
 
 
 

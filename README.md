@@ -1,5 +1,77 @@
-## platform-for-excel-services
+## PHP platform for proprietary services performed by Excel
 
-This project is developed based on the tutorial project of Laravel5 developed by bestmomo (https://github.com/bestmomo/laravel5-example). The UI of back and front directly uses the bestmomo's project while databases, business logic is largely re-implemented based on a customer's requirement.
+This project is developed based on Laravel 5.2 ( https://laravel.com/docs/5.2 ) and its tutorial application
+ provided by bestmomo ( https://github.com/bestmomo/laravel5-example ) including the fronted templates and functions 
+email confirmation, password reset, etc. The work of this project is elaborated in the dissertation report 
+'developing cloud services for proprietary software'.
 
-The project also uses PHPExcel(https://github.com/PHPOffice/PHPExcel) to perform calculation on webpages.
+This application has been deployed in the website ( https://www.jjbioenergy.org/ ), where the usage (user manual) 
+is explained in Appendix A of the dissertation report. This document explains the installation of the application.
+
+### installation for Linux
+
+1. install LAMP stack `sudo apt-get install lamp-server^`
+
+1. Install Composer (dependency manager for php) following https://getcomposer.org/
+
+2. Install the framework Laravel following https://laravel.com/docs/5.2/installation
+
+3. Assuming the project is located at `/ver/www/html/project`, execute the commands
+
+`cd /ver/www/html/project`
+
+`composer install`
+
+4. Generate an application key for security
+
+`php artisan key:generate`
+
+5. create a new database and configure `.env` file at project root and cache it.
+
+`php artisan config:cache`
+
+6. configure permissions setting
+
+`sudo chmod -R 777 storage`
+
+`sudo chmod -R 775 public/excel`
+
+`sudo chown -R www-data:root public/excel`
+
+7. initialize database tables and seeds
+
+`php artisan migrate --seed`
+
+#### 8.1. To perform a simple testing with PHP built-in server
+
+`php artisan serve`
+
+and perform testing using port 8000
+
+#### 8.2. To deploy the application within Apache web server, configure the `000-default.conf` file under the 
+/etc/apache2/sites-available directory, set
+`DocumentRoot /ver/www/html/project/public`
+
+`<Directory /ver/www/html/project/public>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny
+                allow from all
+</Directory>`
+
+enable mod_rewrite by
+
+`a2enmod rewrite`
+
+and restart apache server by
+
+`sudp service apache2 restart`
+
+THen performing testing at localhost
+
+Note: The local testing version cannot provide IPN functions developed, i.e., the site can make a payment with 
+PayPal but cannot receive IPN from PayPal server, hence cannot automatically authorize users' accessibility for a 
+paid services.
+
+
+

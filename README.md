@@ -50,18 +50,15 @@ and perform testing using port 8000
 
 #### 8.2. To deploy the application within Apache web server, configure the `000-default.conf` file under the 
 `/etc/apache2/sites-available` directory, set
+
 `DocumentRoot /ver/www/html/project/public`
 
-`<Directory /ver/www/html/project/public>
-
+```<Directory /ver/www/html/project/public>
                 Options Indexes FollowSymLinks MultiViews
-
                 AllowOverride All
-
                 Order allow,deny
-
                 allow from all
-</Directory>`
+</Directory>```
 
 enable mod_rewrite by
 

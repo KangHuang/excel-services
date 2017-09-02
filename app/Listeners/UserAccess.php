@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\UserAccess as UserAccessEvent;
 
-class UserAccess extends ListenerBase
+class UserAccess extends BasicListener
 {
     /**
      * Handle the event.

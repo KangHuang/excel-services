@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Redis;
-use App\Jobs\ChangeLocale;
 use App\Http\Requests\ExcelRequest;
 use App\Repositories\ServiceRepository;
 

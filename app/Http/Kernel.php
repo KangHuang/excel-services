@@ -1,17 +1,19 @@
-<?php namespace App\Http;
+<?php
+
+namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel {
 
-	/**
-	 * The application's global HTTP middleware stack.
-	 *
-	 * @var array
-	 */
-	protected $middleware = [
+    /**
+     * The application's global HTTP middleware stack.
+     *
+     * @var array
+     */
+    protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-	];
+    ];
 
     /**
      * The application's route middleware groups.
@@ -32,22 +34,20 @@ class Kernel extends HttpKernel {
         ],
     ];
 
-	/**
-	 * The application's route middleware.
-	 *
-	 * @var array
-	 */
-	protected $routeMiddleware = [
+    /**
+     * The application's route middleware.
+     *
+     * @var array
+     */
+    protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-		'admin' => \App\Http\Middleware\IsAdmin::class,
-		'redac' => \App\Http\Middleware\IsRedactor::class,
-		'ajax' => \App\Http\Middleware\IsAjax::class,
-                'manager' => \App\Http\Middleware\IsManager::class,
-                'permit' => \App\Http\Middleware\IsPermit::class,
-                'director' => \App\Http\Middleware\IsDirector::class,
-                'usepermit' =>  \App\Http\Middleware\IsUserPermit::class,
-	];
+        'admin' => \App\Http\Middleware\IsAdmin::class,
+        'manager' => \App\Http\Middleware\IsManager::class,
+        'permit' => \App\Http\Middleware\IsPermit::class,
+        'director' => \App\Http\Middleware\IsDirector::class,
+        'usepermit' => \App\Http\Middleware\IsUserPermit::class,
+    ];
 
 }

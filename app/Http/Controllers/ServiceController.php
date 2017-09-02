@@ -122,7 +122,7 @@ class ServiceController extends Controller {
     /**
      * store a new service
      *
-     * @param  App\Http\Requests\PostRequest $request
+     * @param  App\Http\Requests\ServiceRequest $request
      * @return Response
      */
     public function store(ServiceRequest $request) {

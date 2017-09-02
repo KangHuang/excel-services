@@ -152,20 +152,6 @@ class UserRepository extends BaseRepository
 	}
 
 	/**
-	 * Update a user.
-	 *
-	 * @param  array  $inputs
-	 * @param  App\Models\User $user
-	 * @return void
-	 */
-	public function update($inputs, $user)
-	{
-		$user->confirmed = isset($inputs['confirmed']);
-
-		$this->save($user, $inputs);
-	}
-
-	/**
 	 * Get statut of authenticated user.
 	 *
 	 * @return string

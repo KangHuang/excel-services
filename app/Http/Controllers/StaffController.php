@@ -1,12 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use App\Repositories\UserRepository,App\Repositories\RoleRepository;
-use App\Http\Requests\UserCreateRequest;
-use App\Http\Requests\UserUpdateRequest;
-use App\Http\Requests\RoleRequest;
+use App\Http\Requests\StaffCreateRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class StaffController extends Controller {
 
@@ -80,12 +76,12 @@ class StaffController extends Controller {
 	/**
 	 * save a created staff
 	 *
-	 * @param  App\requests\UserCreateRequest $request
+	 * @param  App\requests\StaffCreateRequest $request
 	 *
 	 * @return Response
 	 */
 	public function store(
-		UserCreateRequest $request)
+		StaffCreateRequest $request)
 	{
 		$user = $this->user_handler->store($request->all());
 

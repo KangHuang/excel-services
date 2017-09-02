@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Repositories\UserRepository,
     App\Repositories\ProviderRepository;
 use App\Jobs\SendMail;
@@ -17,8 +17,8 @@ use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\View\Factory;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Mail\Message;
-use App\Http\Requests\Auth\EmailPasswordLinkRequest;
-use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Requests\ResetLinkRequest;
+use App\Http\Requests\ResetFormRequest;
 
 class UserAuthController extends Controller {
 
@@ -177,12 +177,12 @@ class UserAuthController extends Controller {
      /**
      * Send a reset link to the given user.
      *
-     * @param  EmailPasswordLinkRequest  $request
+     * @param  ResetLinkRequest  $request
      * @param  Illuminate\View\Factory $view
      * @return Response
      */
     public function postEmail(
-    EmailPasswordLinkRequest $request, Factory $view) {
+    ResetLinkRequest $request, Factory $view) {
             $view->composer('emails.auth.password', function($view) {
                 $view->with([
                     'title' => trans('front/password.email-title'),
@@ -216,10 +216,10 @@ class UserAuthController extends Controller {
     /**
      * Reset the given user's password.
      * 
-     * @param  ResetPasswordRequest  $request
+     * @param  ResetFormRequest  $request
      * @return Response
      */
-    public function postReset(ResetPasswordRequest $request) {
+    public function postReset(ResetFormRequest $request) {
         $credentials = $request->only(
                 'email', 'password', 'password_confirmation', 'token'
         );

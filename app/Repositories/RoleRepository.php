@@ -33,24 +33,6 @@ class RoleRepository {
 	}
 
 	/**
-	 * Update roles.
-	 *
-	 * @param  array  $inputs
-	 * @return void
-	 */
-	public function update($inputs)
-	{
-		foreach ($inputs as $key => $value)
-		{
-			$role = $this->role->where('slug', $key)->firstOrFail();
-
-			$role->title = $value;
-			
-			$role->save();
-		}
-	}
-
-	/**
 	 * Get roles collection.
 	 *
 	 * @param  App\Models\User

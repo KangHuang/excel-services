@@ -4,8 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-use App\Jobs\SetLocale;
-
 use Illuminate\Bus\Dispatcher as BusDispatcher;
 use App\Events\UserAccess;
 
@@ -20,25 +18,17 @@ class App
 	protected $bus;
 
 	/**
-	 * The command bus.
-	 *
-	 * @array $bus
-	 */
-	protected $setLocale;
-
-	/**
 	 * Create a new App instance.
 	 *
 	 * @param  Illuminate\Bus\Dispatcher $bus
-	 * @param  App\Jobs\SetLocaleCommand $setLocaleCommand
 	 * @return void
 	*/
 	public function __construct(
-		BusDispatcher $bus,
-		SetLocale $setLocale)
+		BusDispatcher $bus
+		)
 	{
 		$this->bus = $bus;
-		$this->setLocale = $setLocale;
+		
 	}
 
 	/**
@@ -50,7 +40,7 @@ class App
 	 */
 	public function handle($request, Closure $next)
 	{
-		$this->bus->dispatch($this->setLocale);
+		
 
 		event(new UserAccess);
 

@@ -1,4 +1,4 @@
-<?php namespace App\Services\Html;
+<?php namespace App\Services;
 
 class FormBuilder extends \Collective\Html\FormBuilder {
 

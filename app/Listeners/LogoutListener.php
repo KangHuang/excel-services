@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use Illuminate\Auth\Events\Logout;
 
-class LogoutSuccess extends ListenerBase
+class LogoutListener extends BasicListener
 {
     /**
      * Handle the event.

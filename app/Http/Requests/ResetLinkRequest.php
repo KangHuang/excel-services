@@ -1,6 +1,6 @@
 <?php namespace App\Http\Requests;
 
-class RoleRequest extends Request {
+class ResetLinkRequest extends Request {
 
 	/**
 	 * Get the validation rules that apply to the request.
@@ -10,9 +10,7 @@ class RoleRequest extends Request {
 	public function rules()
 	{
 		return [
-			'admin' => 'required|alpha|max:50',
-			'redac' => 'required|alpha|max:50',
-			'user'  => 'required|alpha|max:50'
+			'email' => 'required|email',
 		];
 	}
 

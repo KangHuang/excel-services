@@ -45,20 +45,4 @@ class ContactRepository extends BaseRepository {
 		$contact->save();
 	}
 
-	/**
-	 * Update a contact.
-	 *
-	 * @param  bool  $vu
-	 * @param  int   $id
-	 * @return void
-	 */
-	public function update($seen, $id)
-	{
-		$contact = $this->getById($id);
-
-		$contact->seen = $seen == 'true';
-
-		$contact->save();
-	}
-
 }

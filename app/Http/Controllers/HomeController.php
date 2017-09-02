@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ChangeLocale;
 
 class HomeController extends Controller
 {

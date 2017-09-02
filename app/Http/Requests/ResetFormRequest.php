@@ -1,8 +1,8 @@
-<?php namespace App\Http\Requests\Auth;
+<?php namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class ResetPasswordRequest extends Request {
+class ResetFormRequest extends Request {
 
 	/**
 	 * Get the validation rules that apply to the request.
@@ -13,7 +13,7 @@ class ResetPasswordRequest extends Request {
 	{
 		return [
 			'token' => 'required',
-			'email' => 'required',
+			'email' => 'required|email',
 			'password' => 'required|min:8|confirmed',
 		];
 	}

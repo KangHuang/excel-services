@@ -168,7 +168,7 @@ return [
 		App\Providers\AuthServiceProvider::class,
 		App\Providers\EventServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
-		App\Services\Html\HtmlServiceProvider::class,
+		App\Services\HtmlServiceProvider::class,
 		Bestmomo\Filemanager\FilemanagerServiceProvider::class,
 
 	],

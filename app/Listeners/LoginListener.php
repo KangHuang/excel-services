@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use Illuminate\Auth\Events\Login;
 
-class LoginSuccess extends ListenerBase
+class LoginListener extends BasicListener
 {
     /**
      * Handle the event.

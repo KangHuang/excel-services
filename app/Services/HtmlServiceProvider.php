@@ -1,4 +1,4 @@
-<?php namespace App\Services\Html;
+<?php namespace App\Services;
 
 class HtmlServiceProvider extends \Collective\Html\HtmlServiceProvider {
 

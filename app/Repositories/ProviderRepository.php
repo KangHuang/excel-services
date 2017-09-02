@@ -38,41 +38,6 @@ class ProviderRepository extends BaseRepository {
     }
 
     /**
-     * Get users collection paginate.
-     *
-     * @param  int  $n
-     * @return Illuminate\Support\Collection
-     */
-    public function index($n) {
-
-        return $this->model
-                        ->oldest('seen')
-                        ->latest()
-                        ->paginate($n);
-    }
-
-    /**
-     * Count the users.
-     *
-     * @return int
-     */
-    public function count() {
-        return $this->model->count();
-    }
-
-    /**
-     * Count the users.
-
-     * @return int
-     */
-    public function counts() {
-
-        $counts['total'] = $this->count();
-
-        return $counts;
-    }
-
-    /**
      * Create a user.
      *
      * @param  array  $inputs
@@ -115,33 +80,6 @@ class ProviderRepository extends BaseRepository {
      */
     public function getStatut() {
         return session('statut');
-    }
-
-    /**
-     * Valid user.
-     *
-     * @param  bool  $valid
-     * @param  int   $id
-     * @return void
-     */
-    public function valid($valid, $id) {
-        $provider = $this->getById($id);
-
-        $provider->valid = $valid == 'true';
-
-        $provider->save();
-    }
-
-    /**
-     * Destroy a user.
-     *
-     * @param  App\Models\User $provider
-     * @return void
-     */
-    public function destroyUser(User $provider) {
-        //delete dependency here
-
-        $provider->delete();
     }
 
     /**

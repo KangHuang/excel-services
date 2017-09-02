@@ -8,7 +8,6 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "laravelcollective/html": "5.2.*",
-        "bestmomo/filemanager": "1.1.*",
         "sarav/laravel-multiauth": "^0.0.7",
         "paypal/rest-api-sdk-php": "*",
         "predis/predis": "^1.1",

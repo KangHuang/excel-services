@@ -23,9 +23,9 @@
     echo "<input  name='_token' value='$token' hidden>";
     echo '<table>';
 
-    for ($row = $lowestRow; $row <= $lastRow; $row++) {
+    for ($row = $lowestRow; $row <= $highestRow; $row++) {
         echo "<tr>";
-        for ($col = $lowestCol; $col < $highestColumnIndex; $col++) {
+        for ($col = $lowestCol; $col <= $highestCol; $col++) {
             $type = $sheet->getCellByColumnAndRow($col, $row)->getDataType();
             $value = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
             if ($type == PHPExcel_Cell_DataType::TYPE_NUMERIC)
@@ -46,9 +46,9 @@
         echo '<center>technical information</center>';
         echo "<form>";
         echo '<table>';
-        for ($row = $lowestRow2; $row <= $lastRow2; $row++) {
+        for ($row = $lowestRow2; $row <= $highestRow2; $row++) {
             echo "<tr>";
-            for ($col = $lowestCol2; $col < $highestColumnIndex2; $col++) {
+            for ($col = $lowestCol2; $col <= $highestCol2; $col++) {
                 $coordinate = $sheet2->getCellByColumnAndRow($col, $row)->getCoordinate();
                 $value = $sheet2->getCellByColumnAndRow($col, $row)->getCalculatedValue();
                 if (in_array($coordinate, $hidearray_tec) && $hid_tec != 'no')
@@ -65,9 +65,9 @@
         echo '<center>financial information</center>';
         echo "<form>";
         echo '<table>';
-        for ($row = $lowestRow2; $row <= $lastRow2; $row++) {
+        for ($row = $lowestRow2; $row <= $highestRow2; $row++) {
             echo "<tr>";
-            for ($col = $lowestCol2; $col < $highestColumnIndex2; $col++) {
+            for ($col = $lowestCol2; $col <= $highestCol2; $col++) {
                 $coordinate = $sheet2->getCellByColumnAndRow($col, $row)->getCoordinate();
                 $value = $sheet2->getCellByColumnAndRow($col, $row)->getCalculatedValue();
                 if (in_array($coordinate, $hidearray_fin) && $hid_fin != 'no')

@@ -1,9 +1,9 @@
 ## PHP platform for proprietary services powered by Excel
 
-This project is developed based on [Laravel 5.2](https://laravel.com/docs/5.2). It also uses the [HTML5 Boilerplate](https://startbootstrap.com/) and [Bootstrap](http://getbootstrap.com/) for frontend templates and JQuery and CSS plugins, [CKEditor](https://ckeditor.com/) is used for some text areas. In addition, [PHPExcel](https://github.com/PHPOffice/PHPExcel) is exploited for providing Excel services  The work of this project is elaborated in the dissertation report 
-'developing cloud services for proprietary software'.
+This project is developed based on [Laravel 5.2](https://laravel.com/docs/5.2). It also uses the [HTML5 Boilerplate](https://startbootstrap.com/) and [Bootstrap](http://getbootstrap.com/) for frontend templates, JQuery and CSS plugins, [CKEditor](https://ckeditor.com/) is used for providing some text areas. In addition, [PHPExcel](https://github.com/PHPOffice/PHPExcel) is exploited for providing Excel services and [PayPal-PHP SDK](https://github.com/paypal/PayPal-PHP-SDK) is used for payment. The work of this project is elaborated in the dissertation report 
+"developing cloud services for proprietary software".
 
-This application has been deployed in the website (https://www.jjbioenergy.org/), where the usage (user manual) is explained in Appendix A of the dissertation report. This document explains the installation of the application.
+This application has been deployed in the website (https://www.jjbioenergy.org/), where the usage (user manual) is explained in Appendix A of the dissertation report. This document explains how to install the application and perform testing locally.
 
 ### installation for Linux
 
@@ -72,9 +72,11 @@ and restart apache server by
 
 Then performing testing at localhost.
 
-**Note**: The testing version of localhost cannot provide `IPNListener` function developed, i.e., the site can make a payment with PayPal but cannot receive IPN from PayPal server, hence cannot automatically authorize users' accessibility for paid services.
+**Note**: 
 
-The PayPal application id and secret are in `__construct` function of `PaymentContoller` class at `app/Controllers/PaymentController.php`
+* The testing version of localhost cannot provide `IPNListener` function developed, i.e., the site can make a payment with PayPal but cannot receive IPN from PayPal server, hence cannot automatically authorize users' accessibility for paid services.
+
+* The testing PayPal application id and secret are in `__construct` function of `PaymentContoller` class at `app/Controllers/PaymentController.php`, change it when needed.
 
 
 

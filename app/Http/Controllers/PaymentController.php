@@ -35,11 +35,7 @@ class PaymentController extends Controller {
                     'mode' => 'live',
                     'log.LogEnabled' => true,
                     'log.FileName' => public_path('../storage/logs/PayPal.log'),
-                    'log.LogLevel' => 'INFO', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
-                //    'cache.enabled' => true,
-                // 'http.CURLOPT_CONNECTTIMEOUT' => 30
-                // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
-                //'log.AdapterFactory' => '\PayPal\Log\DefaultLogFactory' // Factory class implementing \PayPal\Log\PayPalLogFactory
+                    'log.LogLevel' => 'INFO', 
                 )
         );
         $this->service_gestion = $service_gestion;
@@ -56,9 +52,8 @@ class PaymentController extends Controller {
         $service = $this->service_gestion->getById($service_id);
         $price = $service->price;
         // ### Payer
-// A resource representing a Payer that funds a payment
-// For paypal account payments, set payment method
-// to 'paypal'.
+// set a payer
+
         $payer = new Payer();
         $payer->setPaymentMethod("paypal");
 
@@ -70,22 +65,20 @@ class PaymentController extends Controller {
                 ->setPrice($service->price);
         $itemList = new ItemList();
         $itemList->setItems(array($item1));
-// ### Amount
-// Lets you specify a payment amount.
-// You can also specify additional details
-// such as shipping, tax.
+        
+// specify a payment amount.
+
         $amount = new Amount();
         $amount->setCurrency("GBP")
                 ->setTotal($price);
-// ### Payee
-// Specify a payee with that user's email or merchant id
-// Merchant Id can be found at https://www.paypal.com/businessprofile/settings/
+
+// Specify a payee with that user's email
+        
         $payee = new Payee();
         $payee->setEmail($service->provider->email);
-// ### Transaction
-// A transaction defines the contract of a
-// payment - what is the payment for and who
-// is fulfilling it.
+
+// A transaction defines the payment details
+        
         $transaction = new Transaction();
         $transaction->setAmount($amount)
                 ->setItemList($itemList)
@@ -93,38 +86,32 @@ class PaymentController extends Controller {
                 ->setPayee($payee)
                 ->setInvoiceNumber(uniqid())
                 ->setCustom(auth()->guard('users')->id());
-// ### Redirect urls
-// Set the urls that the buyer must be redirected to after
-// payment approval/ cancellation.
+
+// Set the urls for buyers to be redirected
+
         $baseUrl = $this->getBaseUrl();
         $redirectUrls = new RedirectUrls();
         $redirectUrls->setReturnUrl("$baseUrl/service/executePayment?success=true")
                 ->setCancelUrl("$baseUrl/service/executePayment?success=false");
-// ### Payment
-// A Payment Resource; create one using
-// the above types and intent set to 'sale'
+
+// A Payment Resource
+
         $payment = new Payment();
         $payment->setIntent("sale")
                 ->setPayer($payer)
                 ->setRedirectUrls($redirectUrls)
                 ->setTransactions(array($transaction));
-// ### Create Payment
-// Create a payment by calling the 'create' method
-// passing it a valid apiContext.
-// (See bootstrap.php for more on `ApiContext`)
-// The return object contains the state and the
-// url to which the buyer must be redirected to
-// for payment approval
+        
+// Create Payment
+
         try {
             $payment->create($this->apiContext);
         } catch (Exception $ex) {
-            // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
             exit(1);
         }
-// ### Get redirect url
-// The API response provides the url that you must redirect
-// the buyer to. Retrieve the url from the $payment->getApprovalLink()
-// method
+        
+// Get redirect url
+
         $approvalUrl = $payment->getApprovalLink();
         
         $comments = $service->comments;
@@ -141,22 +128,19 @@ class PaymentController extends Controller {
         // ### Approval Status
 // Determine if the user approved the payment or not
         if (isset($_GET['success']) && $_GET['success'] == 'true') {
-            // Get the payment Object by passing paymentId
-            // payment id was previously stored in session in
-            // CreatePaymentUsingPayPal.php
+            
+            // Get the payment Object
             $paymentId = $_GET['paymentId'];
             $payment = Payment::get($paymentId, $this->apiContext);
-            // ### Payment Execute
-            // PaymentExecution object includes information necessary
-            // to execute a PayPal account payment.
-            // The payer_id is added to the request query parameters
-            // when the user is redirected from paypal back to your site
+            
+            // Payment Execution object
+
             $execution = new PaymentExecution();
             $execution->setPayerId($_GET['PayerID']);
 
             try {
                 // Execute the payment
-                // (See bootstrap.php for more on `ApiContext`)
+
                 $result = $payment->execute($execution, $this->apiContext);
                 try {
                     $payment = Payment::get($paymentId, $this->apiContext);
@@ -173,7 +157,7 @@ class PaymentController extends Controller {
     }
 
     /**
-     * ### getBaseUrl function
+     * ### getBaseUrl function from https://github.com/paypal/PayPal-PHP-SDK/blob/master/sample/common.php
      * // utility function that returns base url for
      * // determining return/cancel urls
      *
@@ -226,6 +210,8 @@ class PaymentController extends Controller {
     }
 
 }
+
+//from PayPal IPN sample code https://github.com/paypal/ipn-code-samples
 
 class PaypalIPN {
 

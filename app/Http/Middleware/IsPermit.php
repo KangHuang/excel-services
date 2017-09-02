@@ -50,9 +50,8 @@ class IsPermit {
             foreach ($managers as $manager){
                 if($usersPermit->contains($manager->id))
                     return $next($request);
-                else
-                    return redirect('/services')->with('error', 'Sorry, you do not have access to this service');
             }
+            return redirect('/services')->with('error', 'Sorry, you do not have access to this service');
         }
         
         else if(session('statut') === 'admin'){

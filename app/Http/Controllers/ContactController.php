@@ -41,7 +41,7 @@ class ContactController extends Controller {
 	}
 
 	/**
-	 * Store a newly created resource in storage.
+	 * Store a contact message for visitors
 	 *
 	 * @param  App\Repositories\ContactRepository $contact_gestion
 	 * @param  ContactRequest $request
@@ -57,25 +57,7 @@ class ContactController extends Controller {
 	}
 
 	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  App\Repositories\ContactRepository $contact_gestion
-	 * @param  Illuminate\Http\Request $request
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update(
-		ContactRepository $contact_gestion,
-		Request $request, 		 
-		$id)
-	{
-		$contact_gestion->update($request->input('seen'), $id);
-
-		return response()->json(['statut' => 'ok']);
-	}
-
-	/**
-	 * Remove the specified resource from storage.
+	 * delete a contact message
 	 *
 	 * @param  App\Repositories\ContactRepository $contact_gestion
 	 * @param  int  $id

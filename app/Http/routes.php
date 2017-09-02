@@ -39,7 +39,7 @@ Route::group(['middleware' => ['web']], function () {
         
         //ajax
 	Route::put('postseen/{id}', 'ServiceController@updateSeen');
-	Route::put('postactive/{id}', 'ServiceController@updateActive');
+	Route::put('postactive/{id}', 'ServiceController@updateActive',['middleware' => ['permit','admin']]);
 	Route::post('postrelation/{user_id}', 'ServiceController@relation');        
 
 
@@ -57,35 +57,35 @@ Route::group(['middleware' => ['web']], function () {
 
 
 	// User
-	Route::get('user/create', ['uses' => 'UserController@create','middleware' => 'manager', 'as'=>'user.create']);
-	Route::post('user/create', ['uses' => 'UserController@store','middleware' => 'manager']);
-        Route::get('user/show', ['uses' => 'UserController@index','middleware' => 'manager', 'as'=>'user.show']);
-        Route::get('user/destroy/{staff_id}', ['uses' => 'UserController@destroyStaff','middleware' => 'manager', 'as'=>'user.destroy']);
+	Route::get('user/create', ['uses' => 'StaffController@create','middleware' => 'manager', 'as'=>'user.create']);
+	Route::post('user/create', ['uses' => 'StaffController@store','middleware' => 'manager']);
+        Route::get('user/show', ['uses' => 'StaffController@index','middleware' => 'manager', 'as'=>'user.show']);
+        Route::get('user/destroy/{staff_id}', ['uses' => 'StaffController@destroyStaff','middleware' => 'manager', 'as'=>'user.destroy']);
 
 
-//	Route::resource('user', 'UserController');
+//	Route::resource('user', 'StaffController');
 
 	// Authentication routes...
-	Route::get('auth/login', 'Auth\AuthController@getLogin');
-	Route::post('auth/login', 'Auth\AuthController@postLogin');
-	Route::get('auth/logout', 'Auth\AuthController@getLogout');
-	Route::get('auth/confirm/{token}', 'Auth\AuthController@getConfirm');
+	Route::get('auth/login', 'UserAuthController@getLogin');
+	Route::post('auth/login', 'UserAuthController@postLogin');
+	Route::get('auth/logout', 'UserAuthController@getLogout');
+	Route::get('auth/confirm/{token}', 'UserAuthController@getConfirm');
         
 
 	// Resend routes...
-	Route::get('auth/resend', 'Auth\AuthController@getResend');
+	Route::get('auth/resend', 'UserAuthController@getResend');
 
 	// Registration routes...
-	Route::get('auth/register', 'Auth\AuthController@getRegister');
-	Route::post('auth/register', 'Auth\AuthController@postRegister');
+	Route::get('auth/register', 'UserAuthController@getRegister');
+	Route::post('auth/register', 'UserAuthController@postRegister');
 
 	// Password reset link request routes...
-	Route::get('password/email', 'Auth\PasswordController@getEmail');
-	Route::post('password/email', 'Auth\PasswordController@postEmail');
+	Route::get('password/email', 'UserAuthController@getEmail');
+	Route::post('password/email', 'UserAuthController@postEmail');
 
 	// Password reset routes...
-	Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
-	Route::post('password/reset', 'Auth\PasswordController@postReset');
+	Route::get('password/reset/{token}', 'UserAuthController@getReset');
+	Route::post('password/reset', 'UserAuthController@postReset');
         
      
 });

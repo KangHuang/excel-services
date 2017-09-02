@@ -8,43 +8,42 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller {
+class StaffController extends Controller {
 
 	/**
 	 * The UserRepository instance.
 	 *
 	 * @var App\Repositories\UserRepository
 	 */
-	protected $user_gestion;
+	protected $user_handler;
 
 	/**
 	 * The RoleRepository instance.
 	 *
 	 * @var App\Repositories\RoleRepository
 	 */	
-	protected $role_gestion;
+	protected $role_handler;
 
         
 	/**
 	 * Create a new UserController instance.
 	 *
-	 * @param  App\Repositories\UserRepository $user_gestion
-	 * @param  App\Repositories\RoleRepository $role_gestion
+	 * @param  App\Repositories\UserRepository $user_handler
+	 * @param  App\Repositories\RoleRepository $role_handler
 	 * @return void
 	 */
 	public function __construct(
-		UserRepository $user_gestion,
-		RoleRepository $role_gestion)
+		UserRepository $user_handler,
+		RoleRepository $role_handler)
 	{
-		$this->user_gestion = $user_gestion;
-		$this->role_gestion = $role_gestion;
+		$this->user_handler = $user_handler;
+		$this->role_handler = $role_handler;
 
 		$this->middleware('manager');
-		$this->middleware('ajax', ['only' => 'updateSeen']);
 	}
 
 	/**
-	 * Display a listing of the resource.
+	 * Display a listing of own staff
 	 *
 	 * @return Response
 	 */
@@ -54,7 +53,7 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Display a listing of the resource.
+	 * Display a listing of a manager's staff
 	 *
      * @param  string  $role
 	 * @return Response
@@ -63,23 +62,23 @@ class UserController extends Controller {
 	{
 		$users = auth()->guard('users')->user()->staff()->paginate(8); 
 		$links = $users->render();
-		$roles = $this->role_gestion->all();
+		$roles = $this->role_handler->all();
 
 		return view('back.users.index', compact('users', 'links', 'roles'));		
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 * form for creating a staff.
 	 *
 	 * @return Response
 	 */
 	public function create()
 	{
-		return view('back.users.create', $this->role_gestion->getAllSelect());
+		return view('back.users.create', $this->role_handler->getAllSelect());
 	}
 
 	/**
-	 * Store a newly created resource in storage.
+	 * save a created staff
 	 *
 	 * @param  App\requests\UserCreateRequest $request
 	 *
@@ -88,7 +87,7 @@ class UserController extends Controller {
 	public function store(
 		UserCreateRequest $request)
 	{
-		$user = $this->user_gestion->store($request->all());
+		$user = $this->user_handler->store($request->all());
 
                 if(isset($_POST['relation'])){
                     auth()->guard('users')->user()->staff()->attach($user->id);
@@ -107,65 +106,9 @@ class UserController extends Controller {
 	{
 		return view('back.users.show',  compact('user'));
 	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  App\Models\User
-	 * @return Response
-	 */
-	public function edit(User $user)
-	{
-		return view('back.users.edit', array_merge(compact('user'), $this->role_gestion->getAllSelect()));
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  App\requests\UserUpdateRequest $request
-	 * @param  App\Models\User
-	 * @return Response
-	 */
-	public function update(
-		UserUpdateRequest $request,
-		User $user)
-	{
-		$this->user_gestion->update($request->all(), $user);
-
-		return redirect('user')->with('ok', trans('back/users.updated'));
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  Illuminate\Http\Request $request
-	 * @param  App\Models\User $user
-	 * @return Response
-	 */
-	public function updateSeen(
-		Request $request, 
-		User $user)
-	{
-		$this->user_gestion->update($request->all(), $user);
-
-		return response()->json();
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  App\Models\user $user
-	 * @return Response
-	 */
-	public function destroy(User $user)
-	{
-		$this->user_gestion->destroyUser($user);
-
-		return redirect('user')->with('ok', trans('back/users.destroyed'));
-	}
         
         /**
-	 * Remove the specified resource from storage.
+	 * Remove the staff if a manager has the relationship
 	 *
 	 * @param  App\Models\user $user
 	 * @return Response
@@ -177,8 +120,8 @@ class UserController extends Controller {
              if(auth()->guard('users')->user()->staff()->get()->contains($staff_id)){
                  
                 auth()->guard('users')->user()->staff()->detach($staff_id);
-                $user = $this->user_gestion->getById($staff_id);
-		$this->user_gestion->destroyUser($user);
+                $user = $this->user_handler->getById($staff_id);
+		$this->user_handler->destroyUser($user);
 		return redirect('user/show')->with('ok', trans('back/users.destroyed'));
              }
              return redirect('user/show')->with('error', trans('back/users.destroy-fail'));             

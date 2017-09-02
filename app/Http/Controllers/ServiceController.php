@@ -20,28 +20,28 @@ class ServiceController extends Controller {
      *
      * @var App\Repositories\ServiceRepository
      */
-    protected $service_gestion;
+    protected $service_handler;
 
     /**
      * The UserRepository instance.
      *
      * @var App\Repositories\UserRepository
      */
-    protected $user_gestion;
+    protected $user_handler;
 
     /**
      * The UserRepository instance.
      *
      * @var App\Repositories\ProviderRepository
      */
-    protected $provider_gestion;
+    protected $provider_handler;
 
     /**
      * The UserRepository instance.
      *
      * @var App\Repositories\RelationRepository
      */
-    protected $relation_gestion;
+    protected $relation_handler;
 
     /**
      * The pagination number.
@@ -53,43 +53,30 @@ class ServiceController extends Controller {
     /**
      * Create a new ServiceController instance.
      *
-     * @param  App\Repositories\ServiceRepository $service_gestion
-     * @param  App\Repositories\UserRepository $user_gestion
+     * @param  App\Repositories\ServiceRepository $service_handler
+     * @param  App\Repositories\UserRepository $user_handler
+     * ...
      * @return void
      */
     public function __construct(
-    ServiceRepository $service_gestion, UserRepository $user_gestion, ProviderRepository $provider_gestion, RelationRepository $relation_gestion) {
-        $this->user_gestion = $user_gestion;
-        $this->service_gestion = $service_gestion;
-        $this->provider_gestion = $provider_gestion;
-        $this->relation_gestion = $relation_gestion;
+    ServiceRepository $service_handler, UserRepository $user_handler, ProviderRepository $provider_handler, RelationRepository $relation_handler) {
+        $this->user_handler = $user_handler;
+        $this->service_handler = $service_handler;
+        $this->provider_handler = $provider_handler;
+        $this->relation_handler = $relation_handler;
         $this->nbrPages = 3;
-
-        $this->middleware('ajax', ['only' => ['updateSeen', 'updateActive']]);
     }
 
     /**
-     * Display a listing of the resource.
+     * Present a list of the resource.
      *
      * @return Response
      */
     public function indexFront() {
-        $posts = $this->service_gestion->indexFront($this->nbrPages);
+        $posts = $this->service_handler->indexFront($this->nbrPages);
         $links = $posts->render();
 
         return view('front.service.index', compact('posts', 'links'));
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Redirection
-     */
-    public function index() {
-        return redirect(route('service.order', [
-            'name' => 'posts.created_at',
-            'sens' => 'asc'
-        ]));
     }
 
     /**
@@ -100,31 +87,13 @@ class ServiceController extends Controller {
      */
     public function indexOrder(Request $request) {
 
-        $request->name = 'services.created_at';
-        $request->sens = 'desc';
-        $statut = $this->user_gestion->getStatut();
-        $posts = auth()->guard('providers')->user()->services()->paginate(10);
+        $statut = $this->user_handler->getStatut();
+        $services = auth()->guard('providers')->user()->services()->paginate(10);
 
-        $links = $posts->appends([
-            'name' => $request->name,
-            'sens' => $request->sens
-        ]);
 
-        if ($request->ajax()) {
-            return response()->json([
-                        'view' => view('back.service.table', compact('statut', 'posts'))->render(),
-                        'links' => e($links->setPath('order')->render())
-            ]);
-        }
+        $posts = $services;
 
-        $links->setPath('')->render();
-
-        $order = (object) [
-                    'name' => $request->name,
-                    'sens' => 'sort-' . $request->sens
-        ];
-
-        return view('back.service.index', compact('posts', 'links', 'order'));
+        return view('back.service.index', compact('posts'));
     }
 
     /**
@@ -143,44 +112,27 @@ class ServiceController extends Controller {
      */
     public function config($service_id) {
 
-        $users = $this->user_gestion->index(10, 'manager');
-        $usersPermit = $this->service_gestion->getById($service_id)->users()->paginate(10);
-        $post = $this->service_gestion->getById($service_id);
+        $users = $this->user_handler->index(10, 'manager');
+        $usersPermit = $this->service_handler->getById($service_id)->users()->paginate(10);
+        $post = $this->service_handler->getById($service_id);
+
         return view('back.service.config', compact('service_id', 'users', 'usersPermit', 'post'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * store a new service
      *
      * @param  App\Http\Requests\PostRequest $request
      * @return Response
      */
     public function store(ServiceRequest $request) {
         $name = $request->file('filename')->getClientOriginalName();
-
         $unique_name = md5($name . time());
-
         $request->file('filename')->move('excel', $unique_name);
-
         $request->merge(['filename_ori' => $unique_name]);
-
-        $this->service_gestion->store($request->all(), auth()->guard('providers')->user()->id);
+        $this->service_handler->store($request->all(), auth()->guard('providers')->user()->id);
 
         return redirect('service/order')->with('ok', trans('back/service.stored'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  Illuminate\Contracts\Auth\Guard $auth	 
-     * @param  string $slug
-     * @return Response
-     */
-    public function show(
-    Guard $auth, $slug) {
-        $user = $auth->user();
-
-        return view('front.service.show', array_merge($this->service_gestion->show($slug), compact('user')));
     }
 
     /**
@@ -192,7 +144,7 @@ class ServiceController extends Controller {
      */
     public function edit($service_id) {
 
-        $service = $this->service_gestion->getById($service_id);
+        $service = $this->service_handler->getById($service_id);
 
         return view('back.service.edit', compact('service'));
     }
@@ -206,7 +158,7 @@ class ServiceController extends Controller {
      */
     public function update(
     ServiceUpdateRequest $request, $service_id) {
-        $this->service_gestion->update($request->all(), $service_id);
+        $this->service_handler->update($request->all(), $service_id);
 
         return redirect('service/order')->with('ok', trans('back/service.updated'));
     }
@@ -220,42 +172,27 @@ class ServiceController extends Controller {
      */
     public function updateActive(
     Request $request, $id) {
-        $post = $this->service_gestion->getById($id);
+        $post = $this->service_handler->getById($id);
 
-        $this->service_gestion->updateActive($request->all(), $id);
+        $this->service_handler->updateActive($request->all(), $id);
 
         return response()->json();
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified service
      *
      * @param  int  $id
      * @return Response
      */
     public function destroy($service_id) {
-        $post = $this->service_gestion->getById($service_id);
+        $post = $this->service_handler->getById($service_id);
 
         File::delete('excel/' . $post->filename);
 
-        $this->service_gestion->destroy($post);
+        $this->service_handler->destroy($post);
 
         return redirect('service/order')->with('ok', trans('back/service.destroyed'));
-    }
-
-    /**
-     * Find search in service
-     *
-     * @param  App\Http\Requests\SearchRequest $request
-     * @return Response
-     */
-    public function search(SearchRequest $request) {
-        $search = $request->input('search');
-        $posts = $this->service_gestion->search($this->nbrPages, $search);
-        $links = $posts->appends(compact('search'))->render();
-        $info = trans('front/service.info-search') . '<strong>' . $search . '</strong>';
-
-        return view('front.service.index', compact('posts', 'links', 'info'));
     }
 
     /**
@@ -267,9 +204,9 @@ class ServiceController extends Controller {
     public function relation(Request $request, $user_id) {
         $service_id = $request->input('service_id');
         if ($request->input('active') == 'true') {
-            $this->service_gestion->getById($service_id)->users()->attach($user_id);
+            $this->service_handler->getById($service_id)->users()->attach($user_id);
         } else {
-            $this->service_gestion->getById($service_id)->users()->detach($user_id);
+            $this->service_handler->getById($service_id)->users()->detach($user_id);
         }
         return response()->json();
     }
@@ -281,7 +218,7 @@ class ServiceController extends Controller {
      * @return Response
      */
     public function makePayment(Request $request, $service_id) {
-        $service = $this->service_gestion->getById($service_id);
+        $service = $this->service_handler->getById($service_id);
         return view('front.service.payment', compact('service'));
     }
 

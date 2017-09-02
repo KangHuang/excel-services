@@ -9,41 +9,39 @@ use App\Repositories\UserRepository;
 
 class CommentController extends Controller {
 
-    /**
-     * The CommentRepository instance.
-     *
+     /*
      * @var App\Repositories\CommentRepository
      */
-    protected $comment_gestion;
+    protected $comment_handler;
 
     /**
-     * Create a new CommentController instance.
+     * Constructor with dependency injection.
      *
-     * @param  App\Repositories\CommentRepository $comment_gestion
+     * @param  App\Repositories\CommentRepository $comment_handler
      * @return void
      */
     public function __construct(
-    CommentRepository $comment_gestion) {
-        $this->comment_gestion = $comment_gestion;
+    CommentRepository $comment_handler) {
+        $this->comment_handler = $comment_handler;
 
         $this->middleware('director', ['except' => ['store']]);
         $this->middleware('usepermit', ['only' => 'store']);
     }
 
     /**
-     * Display a listing of the resource.
+     * shows the comments
      *
      * @return Response
      */
     public function index() {
-        $comments = $this->comment_gestion->index(4);
+        $comments = $this->comment_handler->index(4);
         $links = $comments->render();
 
         return view('back.comments.index', compact('comments', 'links'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * save a comment.
      *
      * @param  App\requests\CommentRequest $request
      * @return Response
@@ -53,42 +51,12 @@ class CommentController extends Controller {
         
         $user_id = auth()->guard('users')->id();
 
-        $this->comment_gestion->store($request->all(), $user_id);
+        $this->comment_handler->store($request->all(), $user_id);
 
 
         return redirect('services')->with('ok', 'comment success');
     }
-
-    /**
-     * Update "seen" in the specified resource in storage.
-     *
-     * @param  Illuminate\Http\Request $request
-     * @param  int  $id
-     * @return Response
-     */
-    public function updateSeen(
-    Request $request, $id) {
-        $this->comment_gestion->update($request->input('seen'), $id);
-
-        return response()->json();
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  App\requests\CommentRequest $request
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(
-    CommentRequest $request, $id) {
-        $id = $request->segment(2);
-        $content = $request->input('comments' . $id);
-        $this->comment_gestion->updateContent($content, $id);
-
-        return response()->json(['id' => $id, 'content' => $content]);
-    }
-
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -98,28 +66,13 @@ class CommentController extends Controller {
      */
     public function destroy(
     Request $request, $id) {
-        $this->comment_gestion->destroy($id);
+        $this->comment_handler->destroy($id);
 
         if ($request->ajax()) {
             return response()->json(['id' => $id]);
         }
 
         return redirect('comment');
-    }
-
-    /**
-     * Validate an user
-     *
-     * @param  Illuminate\Http\Request $request
-     * @param  App\Repositories\UserRepository $user_gestion
-     * @param  int  $id
-     * @return Response
-     */
-    public function valid(
-    Request $request, UserRepository $user_gestion, $id) {
-        $user_gestion->valid($request->input('valid'), $id);
-
-        return response()->json();
     }
 
 }

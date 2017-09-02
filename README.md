@@ -72,5 +72,7 @@ Then performing testing at localhost.
 
 **Note**: The testing version of localhost cannot provide `IPNListener` function developed, i.e., the site can make a payment with PayPal but cannot receive IPN from PayPal server, hence cannot automatically authorize users' accessibility for paid services.
 
+The PayPal application id and secret are in `__construct` function of `PaymentContoller` class at `app/Controllers/PaymentController.php`
+
 
 

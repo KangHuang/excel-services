@@ -87,10 +87,6 @@ class ComposerStaticInit8acf2026487896017458cabca956f81a
             'ClassPreloader\\' => 15,
             'Carbon\\' => 7,
         ),
-        'B' => 
-        array (
-            'Bestmomo\\Filemanager\\' => 21,
-        ),
         'A' => 
         array (
             'App\\' => 4,
@@ -231,10 +227,6 @@ class ComposerStaticInit8acf2026487896017458cabca956f81a
         'Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
-        ),
-        'Bestmomo\\Filemanager\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/bestmomo/filemanager/src',
         ),
         'App\\' => 
         array (
